@@ -1,0 +1,2171 @@
+1 ❑ Interrupt the boot process to Set the root password as password.
+rd.break=ram disk break
+▪ Wait for GRUB menu to appear and then press e to edit.
+▪ Find the line starting with linux and ctrl+e end of line. enter the rd.break at the end.
+▪ Press Ctrl+x to boot the system with these Kernel boot parameters. system is started  in emergency state or emergency shell
+▪ At this stage, root file system is mounted in read only mode to /sysroot and must be remounted with r/w permissions.
+
+$ mount
+
+▪ To mount the root file system with r/w permissions
+$ mount -o remount,rw /sysroot
+
+chrooted shell started with this
+▪ Switch /sysroot to / file system
+$ chroot /sysroot
+▪ To set the root password
+# passwd
+
+▪ To relabel the Selinux contexts
+# touch /.autorelabel
+
+exit
+exit
+
+
+
+2 ❑ Set the SELinux on System in enforcing mode.(security enhance linux selinux)
+
+$ getenforce                    To check SELinux mode
+$ vim /etc/selinux/config                        Set the variable SELINUX=enforcing
+$ systemctl reboot
+$ sestatus or getenforce
+$ man sestatus
+$ id
+
+
+
+
+3 ❑ Set up local yum (dnf) repositories ,BaseOS and AppStream at location /repo/BaseOS and /repo/AppStream on System.
+
+• Repo should be created with yum group information to use yum group.
+$ dnf repolist                  To list repositories configured on system
+        or
+$ yum repolist
+
+
+$ dnf grouplist hidden                   To list available group packages
+
+$ mkdir -p /repo/BaseOS /repo/AppStream          To create directories for repositori
+
+$ cp -irv /run/media/pbajaj/CentOS*/BaseOS/* /repo/BaseOS                       Copy packages and repodata for BaseOS
+$ cp -irv /run/media/pbajaj/CentOS*/AppStream/* /repo/AppStream                 Copy packages and repodata for AppStream
+
+i- for interactiv r-recursive v-verbose
+
+
+# mkdir -p /repo/BaseOS /repo/AppStream
+
+$ scp /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso ajay@192.168.0.9:/home/ajay/Downloads/
+
+
+#mount iso first
+
+# mkdir /media/ISO/CentOS
+# mount -t iso9660 -o loop /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso /media/ISO/CentOS
+
+cd BaseOs
+repodata Packages
+repodata        in repodata  .xml file content repo meta data   about package or yum
+all rpm packages
+Packages
+repo meta data require for yum  require to run
+
+## mount -t iso9660 -o loop /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso /media/ISO/CentOS
+
+# cp -irv /run/media/ajay/CentOS/BaseOS/* /repo/BaseOS
+
+$ dnf grouplist hidden                   To list available group packages
+
+$ mkdir -p /repo/BaseOS /repo/AppStream          To create directories for repositori
+
+$ cp -irv /run/media/pbajaj/CentOS*/BaseOS/* /repo/BaseOS                       Copy packages and repodata for BaseOS
+$ cp -irv /run/media/pbajaj/CentOS*/AppStream/* /repo/AppStream                 Copy packages and repodata for AppStream
+
+i- for interactiv r-recursive v-verbose
+
+
+# mkdir -p /repo/BaseOS /repo/AppStream
+
+$ scp /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso ajay@192.168.0.9:/home/ajay/Downloads/
+# cp -irv /run/media/ISO/CentOS/AppStream/* /repo/AppStream
+
+
+#or mount iso file
+vm ->storage->Controller:IDE->add iso file it will automatically mount iso file in /media/ajay/
+
+check with iso file mounted on
+$ df -h         you see iso mouted file
+$ man dnf
+
+
+
+
+
+
+
+
+4 ❑ Configure System to use BaseOS & AppStream repositories present at /repo/BaseOS and /repo/AppStream respectively.
+
+/etc/yum.conf
+# vim /etc/yum.repos.d/system.repo      Creating .repo file to configure System to use repos.
+
+# cd /etc/yum.repos.d/
+# ls -lrt
+# mkdir /backup                 create all .repo file in backup folder
+# mv * /backup/
+
+baseurl = http://
+baseurl = ftp://
+baseurl = file:///repo/BaseOS           local repo
+
+[BaseOS]
+name = BaseOS
+baseurl = ///repo/BaseOS        #local base repo enable(1) gpgcheck(gnu privacy gurard check)
+gpgcheck = 0                    gpgcheck=1 then also gpgkey=pubkey
+enabled =1                      enabled(1) repo
+[AppStream]
+name = AppStream
+baseurl = ///repo/AppStream
+gpgcheck = 0                    gpgcheck=disable(0)
+enabled = 1
+
+:wq
+
+or
+
+
+[BaseOS]
+name = BaseOS
+baseurl = file:///repo/BaseOS
+gpgcheck = 0
+enabled = 1
+
+[AppStream]
+name = AppStream
+baseurl = file:///repo/AppStream
+gpgcheck = 0
+enabled = 1
+
+# more /etc/yum.conf
+[main]
+gpgcheck=1
+installonly_limit=3
+clean_requirements_on_remove=True
+best=True
+skip_if_unavailable=False
+
+
+
+# dnf/yum clean all                      To clear cache
+
+
+# yum/dnf repolist                      To list repositories configured on System
+baseos appstream
+
+#dnf grouplist hidden                    To list group available packages
+
+# man yum.conf                           Manual page for yum.conf
+
+
+disable subscription manager warning
+# vim /etc/yum/pluginconf.d/subscription-manager.conf
+enabled=0                       set to 0 disable warning
+# yum repolist
+
+
+subscription-manager:-
+
+
+#subscription-manager register --serverurl SERVER_URL
+
+default severurl=subscription.rhsm.redhat.com
+
+specifiy in hostname directive in /etc/rhscm/rhsm.conf file under server section
+
+# vim /etc/rhsm/rhsm.conf
+# subscription-manger attach --auto             to subscribe the redhat
+        a file redhat.repo under /etc/yum.repo.d/ created automatcy
+        by default baseurl of redhat.repo on subcription baseurl=https://cdn.redhat.com  in rhsm.conf
+
+In exam baseurl povided
+--baseurl=
+# subscription-manger register --baseurl BaseURL
+
+
+
+#more /etc/rhscm/rhsm.conf
+[server]
+hostname= subscription.rhscm.redhat.com         default to register
+
+
+[rhsm]
+baseurl = https://cdn.redhat.com         if you subscribe
+
+
+#subscription-manger --help
+register,remove,list,status,unregister,release,attach(for subscribe)
+
+# subscription-manger register --help
+--serverurl=SERVER_URL  to override default server url hostname= in rhsm.conf file
+
+# subscription-manager register
+restering subscription.rhsm.redhat.com:443/subscription
+username:
+password
+        or
+# subscription-manager register --serverurl subscription.rhsm.redhat.com
+restering subscription.rhsm.redhat.com:443/subscription
+username:
+password
+
+# cd /etc/yum.repos.d/
+# ls    nofile  redhat.repo file now create one file
+
+
+# subscription-manger attach --help
+        --auto to attach subscription
+
+## subscription-manger attach --auto
+subscribed
+# ls
+redhat.repo
+
+# more redhat.repo      all repo info
+
+# yum/dnf repolist
+        baseos appstream
+
+# dnf install httpd
+# subscription-manger list
+subscribe expire date version etc
+
+# subscription-manger unregister        to unregister
+
+yum.repos.d #ls
+redhat.repo     empty file unregister
+
+# dnf repolist
+not regiseter system
+
+
+
+#IPA SERVER
+
+#Services configured on IPA Server
+IPA Server machine is pre-configured to provide below services:
+
+
+▪ DNS Server – To provide Hostname resolution
+▪ Forward DNS lookup                    Result (Output)
+#host system.example.com                192.168.99.10
+#host ipaserver.example.com              192.168.99.254
+
+
+▪ Reverse DNS lookup                     Result (Output)
+# host 192.168.99.10                     system.example.com
+# host 192.168.99.254                    ipaserver.example.com
+
+We can also use #nslookup or #dig for same purpose.
+
+$ id
+$ hostname      ipaserver.example.com
+$ ip addr show
+192.168.99.254
+
+
+forward lookup in dns server
+# host ipaserver.example.com
+ipaserver.example.com has address 192.168.99.254
+
+# host system.example.com
+system.example.com has address 192.168.99.10
+
+Reverselookup
+# host 192.168.99.254
+243.99.168.192 domain name pointer (dns) ipaserver.example.com
+
+# host 192.168.99.10
+10.99.168.192 domain name pointer (dns)   server.example.com
+
+
+▪ 389 Directory Server – Provides LDAP functionality to host LDAP users. Four users have been created on Directory Server.
+
+iUsername                        Home Directory
+ldap                             /home/ldapuser/ldap
+ldap1                            /ldap/home/ldap1
+ldap2                            /ldap/home/ldap2
+smb1                             /home/smb1
+
+
+
+$ id ldap
+$ id ldap1
+$ id ldap2
+$ id smb1
+ipaserver@ipaserver$
+$ su - ldap
+ldap$ id        ldapuser
+
+$ pwd   /home/ldapuser/ldap
+$ exit
+
+$ id    ipaserver
+
+
+
+▪ NTP Server -To provide time services
+
+Command                         Action/Description
+
+#vim /etc/chrony.conf           To allow network to use time services
+allow 192.168.99.0/24
+:wq
+
+#systemctl restart chronyd        Restarting chronyd to make changes effective
+
+#firewall-cmd –add-service=ntp --permanent               Configuring firewall to accept inbound traffic
+
+
+NTP server
+$ systermctl status chronyd     active
+$ more /etc/chrony.conf
+alllow 192.168.99.0/24          allow NTP client access from local network
+
+
+▪ NFS Server -To export LDAP user’s Home Directories and one more NFS share
+
+#dnf install nfs-utils                  Installing nfs-server package(s)
+
+# systemctl nfs-server --now enabled     Starting and configuring service to start at boot
+
+#vim /etc/exports                       Defining exports in exports file
+/nfsshare *(rw)
+/home/ldapuser *(rw)
+/ldap/home *(rw)
+:wq
+
+
+#exportfs -arv                           Exporting NFS exports
+#firewall-cmd --add-service={nfs,rpc-bind,mound} --permanent             Configuring firewall to accept inbound NFS traffic
+
+#firewall-cmd --reload           Reloading firewall to make configs effective
+
+
+
+NFS Service / Samba service
+$ systermctl status nfs-server                  active
+$ more /etc/exports             list of nfs             nfs exports
+/nfsshare *(rw)
+/home/ldapuser *(rw)
+/ldap/home *(rw)
+
+$ systemctl status smb          active
+$ more /etc/samba/smb.conf
+[samba]                 ->share name
+comment = samba_share
+path = /samba
+writeable = yes
+
+
+▪ Samba Server
+#dnf install samba cifs-utils
+#systemctl smb --now enabled Starting/enabling smb.service
+
+#vim /etc/samba/smb.conf
+[samba]
+comment = samba_share
+path = /samba
+writable = yes
+:wq
+
+#smbpasswd -a smb1               Creating samba user profile for smb1 user
+
+#firewall-cmd --add-service=samba --permanent            Configuring firewall to accept inbound traffic from client(s)
+
+#firewall-cmd --reload
+
+#semanage fcontext -a -t samba_share_t “/samba(/.*)?”            Setting correct SELinux context type
+
+#restorecon -Rv /samba          Restoring context
+
+
+
+$ls -ldZ /samba                          samba  selinux context type check
+samba_share_t           correcct context
+
+$ getsebool -a | grep nfs       check selinux context on nfs
+nfs_export_all_ro --> on         by default its on by selinux bool
+nfs_export_all_rw --> on
+
+$ getsebool -a | grep samba     check on samba
+samba_export_all_ro --> off        by default its off by selinux bool
+samba_export_all_rw --> off  if we on this bool then no need to set selinux context type on samba share
+
+
+
+$ su - root
+root@ipaserver# pdbedit -L      list samba user
+smb1     user
+#exit
+
+$ firwall-cmd --list-all
+dns http https kerberos ldap ldaps mountd nfs ntp rpc-bind samba ssh
+
+
+
+
+Importing IPASERVER appliance
+▪ Download IPA Server.zip file from One drive link as mentioned below. You need to use any existing Microsoft account to
+download same or create new account.
+https://1drv.ms/u/s!AlfVvq2Yryd6l9gN9MfddX_136c8zA?e=hNg7Dp
+Unzip and import the IPA Server.ova file in VirtualBox. You can do this by opening file and it will be automatically imported.
+▪ Wait for 3-4 minutes for import to complete and the start VM
+
+
+
+
+
+# sudo hostnamectl set-hostname ipaserver.example.com
+[sudo] password for ajay:
+[ajay@ajaycentos ~]$ logout
+$ su - root
+Password:
+[root@ipaserver ~]#
+
+# hostnamectl
+   Static hostname: ipaserver.example.com
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: a3ea3ebf9fd9443d94c33e762ae49c0b
+           Boot ID: 62d80efff790483693c33960d6128a0b
+    Virtualization: oracle
+  Operating System: CentOS Linux 8
+       CPE OS Name: cpe:/o:centos:centos:8
+            Kernel: Linux 4.18.0-305.25.1.el8_4.x86_64
+      Architecture: x86-64
+
+
+# ip a
+delete or stop libvertd dameon to show on networks
+
+deactivate extra interfaces related to virtual bridge
+# systemctl disable libvirtd
+Removed /etc/systemd/system/multi-user.target.wants/libvirtd.service.
+Removed /etc/systemd/system/sockets.target.wants/virtlogd.socket.
+Removed /etc/systemd/system/sockets.target.wants/virtlockd.socket.
+Removed /etc/systemd/system/sockets.target.wants/libvirtd.socket.
+Removed /etc/systemd/system/sockets.target.wants/libvirtd-ro.socket
+
+# systemctl reboot			reboot the machine
+
+# ip a
+all virbo  device gone
+
+
+#nmcli connection add con-name ipaserver type ethernet ifname enp0s3 ipv4.addresses 192.168.99.254/24 ipv4.dns 192.168.99.254 ipv4.method manual
+
+
+con-name ->connection name
+type -> etherrnet 
+ifname-> interface name
+ipv4.addresses	-> ip address/port
+ipv4.dns	->same ip address	dns configure on same machine 
+ipv4.method -> set manual to make connection static ip
+
+# nmcli connection up
+# nmcli connection up ipaserver
+# nmcli connection show
+
+
+#ip a
+192.168.99.254/24 enp0s3
+
+
+#Instlling FREE IPA Server
+
+->installing required packages
+# dnf install -y @idm:DL1		first install idm(identiy management system moodule)
+@dnm:DL1
+DL1->streamname
+
+# dnf install -y freeipa-server bind-dyndb-ldap ipa-server-dns
+{->don't connect IPA Server VM to internet to avoid conflicts related to domain name, however it can be resolved by using --allow-zone-overlap option while installing IPA SERVER
+->disbale libvirtd
+->dnf update -y
+}
+
+
+
+->installing IPA Server,execute below command as root:
+# ipa-server-install
+do you want to configure interated DNS (BIND)? : yes
+server host name : ipaserver.example.com
+confirm domain name: example.com
+please provide realm name: EXAMPLE.COM
+
+Directory Manager Passwrd: 		password
+confirm		:	password
+
+IPA admin password:		password
+confim	:				password
+
+do you want to configure dns forwarders? no
+do you want to search for missing reverse zones ?no
+do you want to configure crony with NTP server or pool address ? no
+hostname: ipaserver.example.com
+ip address: 192.168.99.254
+doain name: example.com
+Realm name: EXAMPLE.COM
+
+continue to configure the system with this values: yes
+
+
+
+->configure firewall to allow inbound traffic
+# firewall-cmd --add-service={http,https,ldap,ldaps,kerberos,dns,ntp} --permanent
+
+# firewall-cmd --reload
+
+# firwall-cmd --list-all
+cockpit dhcpv6-client dns http https kerberos ldap ldaps mountd nfs ntp rpc-bind samba ssh
+
+		or
+
+
+
+Nehara Classes
+
+FreeIPA Configuration in RHEL 8 (CentOS 8):
+=======
+FreeIPA is a free and open source identity management tool sponsored by Red Hat and it is the upstream for the Red Hat Identity Manager(IdM). In this guide, we will discuss on how to install and configure FreeIPA Server on CentOS 8 / RHEL 8 Linux server. FreeIPA Identity management system aims to provide an easy way of centrally managing Identity, Policy, and Audit for users and services. FreeIPA also provides the services like DNS and NTP.
+
+FreeIPA provides:
+
+Central Authentication Management.
+Fine-grained Access Control.
+One Time Password (OTP).
+Direct Connect to Active Directory.
+Integrated Public Key Infrastructure (PKI) Service.
+
+
+Steps:
+
+
+# hostnamectl set-hostname "freeipa.example.com"
+# echo -e "192.168.0.254\tfreeipa.example.com\t ip" >> /etc/hosts
+# cat /etc/hosts
+# yum update -y;reboot
+# yum module list idm
+# yum -y install @idm:DL1
+# yum -y install freeipa-server
+
+optional
+# yum install -y ipa-server-dns			for integrated dns
+
+configure ipa server
+
+# ipa-server-install
+Do you want to configure integrated DNS (BIND)? [no]: yes
+Server host name [freeipa.example.com]: freeipa.example.com
+Please confirm the domain name [example.com]: example.com
+Please provide a realm name [EXAMPLE.COM]: EXAMPLE.COM
+
+Directory Manager password: password
+Password (confirm): password
+
+IPA admin password: password
+Password (confirm): password
+
+Do you want to configure DNS forwarders? [yes]: no
+Do you want to search for missing reverse zones? [yes]: no
+Do you want to configure chrony with NTP server or pool address? [no]: no
+
+The IPA Master Server will be configured with:
+Hostname:       freeipa.example.com
+IP address(es): 192.168.0.254, 192.168.0.32
+Domain name:    example.com
+Realm name:     EXAMPLE.COM
+
+
+Continue to configure the system with these values? [no]: yes
+
+
+#ipactl status
+	or
+	#ipactl start
+	
+# firewall-cmd --add-service={http,https,ldap,ldaps,kerberos,dns,ntp} --permanent
+
+# firewall-cmd --reload
+
+# firwall-cmd --list-all
+
+
+
+-->Managing DNS zones and DNS Record Entries
+
+->configure Forward and Reverse DNS Zones Records
+
+#kinit admin						authenticat as IPA Admin
+
+#ipa dnszone-add 99.168.192.in-add.arpa.					to add reverse zone by name
+					reverse zone name
+in-add->inverse address
+
+adding reverse dns record zone
+# ipa dnsrecord-add 99.168.192.in-addr.arpa. 254 --ptr-rec ipaserver.example.com.			adding PTR record for 192.168.122.254
+					reverse zone name hostbyte(254) 
+--ptr-rec	->for reverse record	
+then hostname
+
+
+adding forward dns record zone
+
+# ipa dnsrecord-add example.com system --a-rec 192.168.99.10							adding a record for system.example.com
+example.com		->forward zone name
+system ->	record name
+--a-rec ->		for forward record zone --a
+192.168.99.10	->ip addres for host what we need to map
+
+
+# ipa dnsrecord-add 99.168.192.in-addr.arpa. 10 --ptr-rec system.example.com.				Adding PTR record for 192.168.122.10
+99.168.192.in-addr.arpa.		->reverse zone name
+10 -> host byte name or record name system.example.com
+--ptr-rec	-> to  add ptr record
+system.example.com	-> host name for system machine(system.example.com)
+
+
+# host system.example.com							forward dns lookup
+
+# host 192.168.122.10								reverse dns lookup
+
+# ipa dnszoe-show example.com/192.168.122.10			displaying dns zone info
+
+
+
+
+[root@freeipa ~]# ipa dnszone-show example.com
+ipa: ERROR: did not receive Kerberos credentials
+
+[root@freeipa ~]# kinit admin
+Password for admin@EXAMPLE.COM: password
+[root@freeipa ~]# ipa dnszone-show example.com
+  Zone name: example.com.
+  Active zone: TRUE
+  Authoritative nameserver: freeipa.example.com.
+  Administrator e-mail address: hostmaster.example.com.
+  SOA serial: 1637399885
+  SOA refresh: 3600
+  SOA retry: 900
+  SOA expire: 1209600
+  SOA minimum: 3600
+  BIND update policy: grant EXAMPLE.COM krb5-self * A; grant EXAMPLE.COM
+                      krb5-self * AAAA; grant EXAMPLE.COM krb5-self * SSHFP;
+  Dynamic update: TRUE
+  Allow query: any;
+  Allow transfer: none;
+
+
+[root@freeipa ~]# host freeipa.example.com				hostname ipaserver		
+freeipa.example.com has address 192.168.0.254			ip addr return
+
+-->add reverse zone record entries
+
+->create reverse zone
+#[root@freeipa ~]# ipa dnszone-add 0.168.192.in-addr.arpa.
+  Zone name: 0.168.192.in-addr.arpa.
+  Active zone: TRUE
+  Authoritative nameserver: freeipa.example.com.
+  Administrator e-mail address: hostmaster
+  SOA serial: 1637404410
+  SOA refresh: 3600
+  SOA retry: 900
+  SOA expire: 1209600
+  SOA minimum: 3600
+  BIND update policy: grant EXAMPLE.COM krb5-subdomain 0.168.192.in-addr.arpa.
+                      PTR;
+  Dynamic update: FALSE
+  Allow query: any;
+  Allow transfer: none;
+
+reverse zone created
+
+
+reverse zone info display
+[root@freeipa ~]# ipa dnszone-show 0.168.192.in-addr.arpa.
+  Zone name: 0.168.192.in-addr.arpa.
+  Active zone: TRUE
+  Authoritative nameserver: freeipa.example.com.
+  Administrator e-mail address: hostmaster
+  SOA serial: 1637404411
+  SOA refresh: 3600
+  SOA retry: 900
+  SOA expire: 1209600
+  SOA minimum: 3600
+  BIND update policy: grant EXAMPLE.COM krb5-subdomain 0.168.192.in-addr.arpa.
+                      PTR;
+  Dynamic update: FALSE
+  Allow query: any;
+  Allow transfer: none;
+
+
+
+->add reverse zone record entries for IPA SERVER 
+
+[root@freeipa ~]# ipa dnsrecord-add 0.168.192.in-addr.arpa. 254 --ptr-rec ipaserver.example.com.
+  Record name: 254
+  PTR record: ipaserver.example.com.
+
+reverse Zone name: 0.168.192.in-addr.arpa.
+254 ->byte
+--ptr-rec	->for add ptr record
+ipaserver.example.com.	->hostname of ipa sever
+
+
+reverse dns lookup for IPA SERVER
+[root@freeipa ~]# host 192.168.0.254					IT WILL return hostname
+254.0.168.192.in-addr.arpa domain name pointer ipaserver.example.com.
+
+[root@freeipa ~]# host 192.168.0.10			we not added any record on system machine
+Host 10.0.168.192.in-addr.arpa. not found: 3(NXDOMAIN)
+
+
+->add reverse zone dns record for  system.examle.com
+
+# ipa dnsrecord-add 0.168.192.in-addr.arpa. 10 --ptr-rec system.example.com.
+  Record name: 10
+  PTR record: system.example.com.
+  
+ system.example.com.	->hostname
+[root@freeipa ~]# host 192.168.0.10				it will return hostname
+10.0.168.192.in-addr.arpa domain name pointer system.example.com.
+
+
+->forward zone dns record lookup for system.examle.com
+[root@freeipa ~]# host system.example.com
+		Host system.example.com not found: 3(NXDOMAIN)		NO such domain
+
+->add forward zone dns record for  system.examle.com
+#[root@freeipa ~]# ipa dnsrecord-add example.com system --a-rec 192.168.0.10
+  Record name: system
+  A record: 192.168.0.10
+
+[root@freeipa ~]# host system.example.com
+system.example.com has address 192.168.0.10
+
+
+for dns lookup #dig command:-
+
+[root@freeipa ~]# dig system.example.com			forward dns lookup
+
+; <<>> DiG 9.11.26-RedHat-9.11.26-6.el8 <<>> system.example.com
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 13028
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 1232
+; COOKIE: 624e1f92b23fdad37fc27b846198d397cbe21b49d30d12ff (good)
+;; QUESTION SECTION:
+;system.example.com.		IN	A
+
+;; ANSWER SECTION:
+system.example.com.	86400	IN	A	192.168.0.10
+
+;; AUTHORITY SECTION:
+example.com.		86400	IN	NS	freeipa.example.com.
+
+;; ADDITIONAL SECTION:
+freeipa.example.com.	1200	IN	A	192.168.0.254
+
+;; Query time: 32 msec
+;; SERVER: 127.0.0.1#53(127.0.0.1)
+;; WHEN: Sat Nov 20 05:53:11 EST 2021
+;; MSG SIZE  rcvd: 129
+
+
+in anwer section return ip address
+[root@freeipa ~]# dig -x 192.168.0.10				reverse dns lookup
+
+;; ANSWER SECTION:
+10.0.168.192.in-addr.arpa. 86400 IN	PTR	system.example.com.
+
+
+
+#for dns lookup #nslookup command:-
+
+[root@freeipa ~]# nslookup system.example.com		ip addres return forward lookup
+Server:		127.0.0.1
+Address:	127.0.0.1#53
+
+Name:	system.example.com
+Address: 192.168.0.10
+
+
+[root@freeipa ~]# nslookup 192.168.0.10				hostname return reverese lookup
+10.0.168.192.in-addr.arpa	name = system.example.com.
+
+
+
+#creating LDAP Users:-
+
+#kinit admin			authenticating as IPA Admin
+password ipa admin
+
+add ldap user
+
+
+1)# ipa user-add --homedir=/home/ldapuser/ldap --password			Creating user with home directory /home/ldapuser/ldap
+
+--homedir=/home/ldapuser/ldap	->for creating custom home dir for ldap user
+--password -> to set password
+ask for first name,last name,password,username(ldap)
+
+creating user home directory
+# mkdir -p /home/ldapuser/ldap								creating directory path
+
+# chown ldap:ldap /home/ldapuser/ldap						setting user group ownership on user's home directory
+
+
+
+2)# ipa user-add --homedir=/ldap/home/ldap1 --password		creating user with home directory /ldap/home/ldap1		
+
+# mkdir -p -p /ldap/home/ldap1								creaing directory path
+
+# chown ldap1:ldap1 /ldap/home/ldap1     					setting user group ownership on user's home directory
+
+
+
+3)# ipa user-add --homedir=/ldap/home/ldap2 --password		creating user with home directory /ldap/home/ldap2
+
+# mkdir -p -p /ldap/home/ldap2								creaing directory path
+
+# chown ldap2:ldap2 /ldap/home/ldap2						setting user group ownership on user's home directory
+
+
+
+4)# ipa user-add --password									creating #smb1 user with default home directory
+here --homedir not user so it create deafault home dir
+
+
+
+# kinit admin
+Password for admin@EXAMPLE.COM: password
+[root@freeipa ~]# 
+
+
+[root@freeipa ~]# ipa user-add --homedir=/home/ldapuser/ldap --password
+
+First name: ldap
+Last name: user
+User login [luser]: ldap		username
+Password: password
+Enter Password again to verify: 
+-----------------
+Added user "ldap"
+-----------------
+  User login: ldap
+  First name: ldap
+  Last name: user
+  Full name: ldap user
+  Display name: ldap user
+  Initials: lu
+  Home directory: /home/ldapuser/ldap
+  GECOS: ldap user
+  Login shell: /bin/sh
+  Principal name: ldap@EXAMPLE.COM
+  Principal alias: ldap@EXAMPLE.COM
+  User password expiration: 20211120142416Z
+  Email address: ldap@example.com
+  UID: 550400001
+  GID: 550400001
+  Password: True
+  Member of groups: ipausers
+  Kerberos keys available: True
+
+
+[root@freeipa ~]# mkdir -p /home/ldapuser/ldap				created home dir of ldap user
+[root@freeipa ~]# ls /home/
+ajay  ldapuser
+]# ls /home/ldapuser/
+ldap
+
+
+[root@freeipa ~]# chown ldap:ldap /home/ldapuser/ldap/				set user and group ownship for ldap user
+
+[root@freeipa ~]# ls -ld /home/ldapuser/ldap/
+drwxr-xr-x. 2 ldap ldap 6 Nov 20 09:26 /home/ldapuser/ldap/
+userownership ldap 
+groupownership ldap
+
+
+2)user ldap1 creating
+
+[root@freeipa ~]# ipa user-add --homedir=/ldap/home/ldap1 --password
+First name: ldap
+Last name: 1
+User login [l1]: ldap1
+Password: password
+Enter Password again to verify: 
+------------------
+Added user "ldap1"
+------------------
+  User login: ldap1
+  First name: ldap
+  Last name: 1
+  Full name: ldap 1
+  Display name: ldap 1
+  Initials: l1
+  Home directory: /ldap/home/ldap1
+  GECOS: ldap 1
+  Login shell: /bin/sh
+  Principal name: ldap1@EXAMPLE.COM
+  Principal alias: ldap1@EXAMPLE.COM
+  User password expiration: 20211120143247Z
+  Email address: ldap1@example.com
+  UID: 550400003
+  GID: 550400003
+  Password: True
+  Member of groups: ipausers
+  Kerberos keys available: True
+
+[root@freeipa ~]# mkdir -p /ldap/home/ldap1
+[root@freeipa ~]# chown ldap1:ldap1 /ldap/home/ldap1/	
+
+[root@freeipa ~]# ls -ld /ldap/home/ldap1/
+drwxr-xr-x. 2 ldap1 ldap1 6 Nov 20 09:33 /ldap/home/ldap1/
+userownership ldap1
+groupownership ldap1
+
+
+
+[root@freeipa ~]# ls /
+bin   dev  home  lib    media  opt   root  sbin  sys  usr
+boot  etc  #ldap  lib64  mnt    proc  run   srv   tmp  var
+
+[root@freeipa ~]# ls /ldap/home/
+ldap1
+
+
+
+3) creating 3rd user ldap2
+[root@freeipa ~]# ipa user-add --homedir=/ldap/home/ldap2 --password
+First name: ldap
+Last name: 2
+User login [l2]: ldap2
+Password: 	password
+Enter Password again to verify: 
+------------------
+Added user "ldap2"
+------------------
+  User login: ldap2
+  First name: ldap
+  Last name: 2
+  Full name: ldap 2
+  Display name: ldap 2
+  Initials: l2
+  Home directory: /ldap/home/ldap2
+  GECOS: ldap 2
+  Login shell: /bin/sh
+  Principal name: ldap2@EXAMPLE.COM
+  Principal alias: ldap2@EXAMPLE.COM
+  User password expiration: 20211120144253Z
+  Email address: ldap2@example.com
+  UID: 550400004
+  GID: 550400004
+  Password: True
+  Member of groups: ipausers
+  Kerberos keys available: True
+
+
+[root@freeipa ~]# mkdir -p /ldap/home/ldap2
+[root@freeipa ~]# chown ldap2:ldap2 /ldap/home/ldap2
+[root@freeipa ~]# ls -ld /ldap/home/ldap2
+drwxr-xr-x. 2 ldap2 ldap2 6 Nov 20 09:44 /ldap/home/ldap2
+
+[root@freeipa ~]# ls /ldap/home/
+ldap1  ldap2
+
+
+4) creating 4th user without home dir 
+
+[root@freeipa ~]# ipa user-add --password
+First name: smb
+Last name: 1
+User login [s1]: smb1
+Password: 
+Enter Password again to verify: 
+-----------------
+Added user "smb1"
+-----------------
+  User login: smb1
+  First name: smb
+  Last name: 1
+  Full name: smb 1
+  Display name: smb 1
+  Initials: s1
+ #Home directory: /home/smb1
+  GECOS: smb 1
+  Login shell: /bin/sh
+  Principal name: smb1@EXAMPLE.COM
+  Principal alias: smb1@EXAMPLE.COM
+  User password expiration: 20211120144649Z
+  Email address: smb1@example.com
+  UID: 550400005
+  GID: 550400005
+  Password: True
+  Member of groups: ipausers
+  Kerberos keys available: True
+
+
+#switch ldap user and change first time password of every ldap user
+[root@freeipa ~]# su - ldap
+[ldap@freeipa ~]$ su - ldap1
+Password: 
+Password expired. Change your password now.
+Current Password: 
+New password: 
+Retype new password: 
+ 
+[ldap1@freeipa ~]$ id
+uid=550400003(ldap1) gid=550400003(ldap1) groups=550400003(ldap1) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+
+
+[ldap@freeipa ~]$ su - ldap2
+Password: 
+Password expired. Change your password now.
+Current Password: 
+New password: 
+Retype new password:
+
+[ldap2@freeipa ~]$ id
+uid=550400004(ldap2) gid=550400004(ldap2) groups=550400004(ldap2) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+
+[ldap@freeipa ~]$ su - smb1
+Password: 
+Password expired. Change your password now.
+Current Password: 
+New password: 
+Retype new password: 
+su: warning: cannot change directory to /home/smb1: No such file or directory
+[smb1@freeipa ldap]$ id
+uid=550400005(smb1) gid=550400005(smb1) groups=550400005(smb1) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+
+[root@freeipa ~]# su - ldap
+Last login: Sat Nov 20 09:58:21 EST 2021 on pts/0
+[ldap@freeipa ~]$ passwd
+Changing password for user ldap.
+Current Password: 
+New password: 
+Retype new password: 
+passwd: all authentication tokens updated successfully.
+
+
+
+
+#Confugring NTP Server to Allow CLients to Use Services:-
+(croynd comes prinstall and started and enabled)
+make change chronyd.conf file to allow system machine to use time servive provided by NTP server configure on IPA Server
+
+
+[root@freeipa ~]# systemctl status chronyd
+● chronyd.service - NTP client/server
+   Loaded: loaded (/usr/lib/systemd/system/chronyd.service; enabled; vendor pre>
+   Active: active (running) 
+
+[root@freeipa ~]# vim /etc/chrony.conf 
+uncomment this or add your machine ip
+allow 192.168.0.0/24		allow NTP Client to this network
+# Allow NTP client access from local network.
+
+
+[root@freeipa ~]# systemctl restart chronyd
+
+
+
+
+#Configuring NFS Server to Export LDAP User_s Home Directories
+
+[root@freeipa ~]# dnf install nfs-utils
+
+start and enable NFS service
+[root@freeipa ~]# systemctl enable --now nfs-server.service
+
+[root@freeipa ~]# systemctl status nfs-server
+● nfs-server.service - NFS server and services
+   Loaded: loaded (/usr/lib/systemd/system/nfs-server.service; enabled; vendor >
+   Active: active (exited) 
+
+
+
+
+#DEFINE NFS EXPORT
+[root@freeipa ~]# vim /etc/exports
+/nfsshare *(rw)
+/home/ldapuser *(rw)				for ldap user 
+/ldap/home *(rw)					for ldap1 and ldap2 user(export basedirectiory of two users)
+
+-------------------------------------------------------------
+
+* ->this export availbae to all machine in the network
+(rw) -> export option read  write permission
+
+share base location of ldap users
+----------------------------------------
+
+
+create NFS share directory
+[root@freeipa ~]# mkdir /nfsshare
+
+
+exports 
+[root@freeipa ~]# exportfs -arv
+exporting *:/ldap/home
+exporting *:/home/ldapuser
+exporting *:/nfsshare
+
+[root@freeipa ~]# man exportfs
+
+ -a     Export or unexport all directories
+ -r     Reexport all directories,
+  -v     Be verbose.
+
+
+
+
+#configure firewall inbound nfs trafiic
+
+[root@freeipa ~]# firewall-cmd --add-service={nfs,rpc-bind,mountd} --permanent
+success
+[root@freeipa ~]# firewall-cmd --reload
+success
+
+(don't need to set selinux context type on these exported dierctory because correspoinding selinux boolean already on)
+[root@freeipa ~]# firewall-cmd --list-all
+  services: cockpit dhcpv6-client dns http https kerberos ldap ldaps mountd nfs ntp rpc-bind ssh
+
+
+
+
+#configure samba share
+[root@freeipa ~]# dnf install samba cifs-utils
+		or
+yum install samba samba-common samba-client -y
+
+
+[root@freeipa ~]# systemctl enable --now smb
+
+
+[root@freeipa ~]# mkdir /samba
+
+now set selinux context type on /samba dir
+# semanage fcontext -a -t samba_share_t "/samba(/.*)?"
+
+]# restorecon -Rv /samba/
+
+# ls -ldZ /samba
+drwxr-xr-x. 2 root root unconfined_u:object_r:samba_share_t:s0 6 Nov 21 00:37 /samba
+
+]# cd /etc/samba/
+
+[root@freeipa samba]# ls
+lmhosts  smb.conf.example
+
+[root@freeipa samba]# cp smb.conf.example smb.conf
+
+[root@freeipa samba]# ls
+lmhosts  smb.conf  smb.conf.example
+
+[root@freeipa samba]# rm smb.conf.example 
+rm: remove regular file 'smb.conf.example'? y
+
+[root@freeipa samba]# ls
+lmhosts  smb.conf
+
+# vim smb.conf
+[samba]
+        comment = samba_share
+        path = /samba
+        writable = yes
+
+# systemctl enable --now smb
+# systemctl restart smb
+]# systemctl status smb
+	active
+
+
+[root@freeipa samba]# testparm 
+Load smb config files from /etc/samba/smb.conf
+
+[samba]
+	comment = samba_share
+	path = /samba
+	read only = No					read only no means it writable
+
+
+[root@freeipa samba]# id smb1
+uid=550400005(smb1) gid=550400005(smb1) groups=550400005(smb1)
+
+[root@freeipa samba]# smbpasswd -a smb1
+New SMB password:
+Retype new SMB password:
+Added user smb1.
+
+[root@freeipa samba]# pdbedit -L		display smb user
+smb1:550400005:smb 1
+
+# firewall-cmd --add-service=samba --permanent
+success
+
+# firewall-cmd --reload
+success
+
+# firewall-cmd --list-all
+  services: cockpit dhcpv6-client dns http https kerberos ldap ldaps mountd nfs ntp rpc-bind samba ssh
+
+
+
+
+# hostnamectl
+	or
+# hostnamectl status		by default it take status if we type hostnamectl
+ 
+# hostname
+
+# man hostnamec
+
+# hostnamectl --help
+
+# more /etc/hostname
+
+# hostnamectl set-hostname system.example.com
+
+# logout
+
+# hostnamectl
+
+# more /etc/hostname
+
+
+4) ❑ Assign hostname system.example.com to System machine.
+
+# hostnamectl or hostname					 		To display current hostname assigned to System
+# hostnamectl set-hostname system.example.com				 To assign new hostname to System
+# man hostnamectl							 To check manual page for hostnamectl
+
+
+# cat /etc/hostname
+# cat /etc/hosts
+# hostnamectl
+# systemctl restart systemd-hostnamed
+
+
+Note : It I also possible to set hostname in /etc/hostname file. Set hostname in file and the reboot System but I suggest to use hostnamectl utility for this task
+
+
+5) ❑ Configure IP Address 192.168.0.10 on ethernet interface enp0s3 on system.example.com and set the DNS IP Address as 192.168.0.254.
+
+• Configure the Default Gateway as 192.168.0.1
+• IP assigned must be static
+
+
+# nmcli connection show 			To display existing connections configured on different interfaces and their status
+
+
+# ip address 						To display existing connections with configured IP Address(s) and status
+
+
+To configure ethernet interface with IPv4 Address and Gateway IP Address
+# nmcli connection add con-name system type ethernet ifname enp0s3 ipv4.addresses 192.168.99.10/24 ipv4.gateway 192.168.99.1
+
+
+To configure DNS IP Address on connection and make connection static
+# nmcli connection modify system ipv4.dns 192.168.99.254 ipv4.method manual
+
+
+# nmcli connection up system			 	 To activate connection
+
+# systemctl restart NetworkManager			 To restart network service
+
+# more /etc/resolv.conf 					 To verify DNS IP Address
+
+# cd /etc/sysconfig/network-scripts/ 		 Location of Connection profile file ifcfg-system
+
+# man nmcli and man nmcli-examples 			 Manual pages for nmcli and nmcli-examples
+
+
+
+
+Note
+NetworkManager is default network manager in RHEL-8 and you will not find network.service pre-installed in RHEL-8 which is installed in case of RHEL-7.
+
+You can install network service by installing package with dnf/yum command.
+dnf install network-scripts
+
+network.service uses network scripts for network management . network.service is deprecated and will be removed probably in
+next major release.
+
+
+
+# id
+# hostname
+system.example.com
+
+[root@system ~]# man nmcli
+/CONNECTION MANAGEMENT COMMANDS
+
+# nmcli device
+DEVICE  TYPE      STATE      CONNECTION 
+enp0s3  ethernet  connected  enp0s3     
+lo      loopback  unmanaged  --  
+
+
+#virbr0 is used to provide connection between kvms(kernel virtualize machine)  connection type bridge
+
+#lo loopback interface
+
+# nmcli connection show
+NAME    UUID                                  TYPE      DEVICE 
+enp0s3  fca59077-ee37-4df1-8c50-73f18446b874  ethernet  enp0s3 
+
+# ip address 
+enp0s3:
+inet 192.168.0.11/24 brd 192.168.0.255 scope global dynamic noprefixroute enp0s3
+
+
+[root@system ~]# nmcli connection add type ethernet ifname enp0s3 con-name system ipv4.addresses 192.168.0.10/24 ipv4.gateway 192.168.0.1 ipv4.dns 192.168.0.254 ipv4.method manual
+
+Connection 'system' (96bb9790-6241-457a-aa8f-7fb419c723c9) successfully added.
+
+/24 	->subnet mask if we don't metion then it will take default subnet mask 32
+
+
+# nmcli connection up system
+
+# ip add
+inet 192.168.0.10/24
+
+# more /etc/resolv.conf				verify dns ip address
+search example.com
+nameserver 192.168.0.254
+
+
+ # route -n					to verify default gatway 
+Kernel IP routing table
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+0.0.0.0         192.168.0.1     0.0.0.0         UG    100    0        0 enp0s3
+192.168.0.0     0.0.0.0         255.255.255.0   U     100    0        0 enp0s3
+
+
+0.0.0.0  -> it matches all destination means if specific route does not exist on routing table then by default traffic will send to default gatway ip address  
+192.168.0.1  -> default gatway
+
+
+# systemctl status NetworkManager
+active running enabled vendor preset: enabled		(by default on enable from vendor)
+
+
+# cd /etc/sysconfig/network-scripts/
+[root@system network-scripts]# ls -l				   interface conf file
+total 8
+-rw-r--r--. 1 root root 248 Jun  8 03:29 ifcfg-enp0s3
+-rw-r--r--. 1 root root 351 Nov 22 01:31 ifcfg-system
+
+
+[root@system network-scripts]# more ifcfg-system 
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none			none/static for static ip (if we did not mention ipv4.method menual it will take dhcp default)
+IPADDR=192.168.0.10
+PREFIX=24						subnet mask we use
+GATEWAY=192.168.0.1				gatway ip
+DNS1=192.168.0.254				dns ip
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=stable-privacy
+NAME=system									name of connection
+UUID=96bb9790-6241-457a-aa8f-7fb419c723c9
+DEVICE=enp0s3										device name
+ONBOOT=yes								onboot yes it will connection activate on boot
+		
+
+Note: we can edit this file or use nmcli to modify connection
+
+# vim /etc/sysconfig/network-scripts/ifcfg-system 
+change from 192.16.0.1 to
+GATEWAY=192.168.0.2
+
+still old gatway so need to reload NetworkMangage to make changes effective
+# nmcli connection show system | grep gateway 
+connection.gateway-ping-timeout:        0
+ipv4.gateway:                           192.168.0.1
+ipv6.gateway:                   
+
+# route -n
+old Gatway ip 192.16.0.1 showing
+
+reload connection profile file
+# nmcli connection reload ifcfg-system
+	or
+# nmcli connection reload				it reload all connection profile
+
+
+gatway updated now
+# nmcli connection show system | grep gateway 
+connection.gateway-ping-timeout:        0
+ipv4.gateway:                           192.168.0.2
+ipv6.gateway:
+
+
+still old gatway showing
+# route -n
+old Gatway ip 192.16.0.1 showing
+
+# nmcli connection up system
+
+now gatway updated
+# route -n
+New Gatway ip 192.16.0.2 showing
+
+
+# dnf install network-scripts
+
+# pwd
+/etc/sysconfig/network-scripts
+
+# ls -l 		many pre network scripts
+
+example
+# ifdown system				if down script it will deacticate the sysem interface
+
+# nmcli connection up system
+
+# dnf remove network-scripts
+
+# ip addr
+192.168.0.10/24
+
+#ls -l 
+ifcfg-system
+
+# ping 192.168.0.254			ping ipa server
+
+# ping freeipa.example.com			ping ipa server hostname it also ping because it configure on ipa server
+
+
+
+
+6) ❑ Configure System(system.example.com) to run in Graphical target.
+
+• Make this setting persistent and System should boot in same target on next reboot.
+
+
+Run Level 			Target Units					Description
+
+
+0 runlevel0.target , poweroff.target 				Shutdown and poweroff the system
+
+1 runlevel1.target , rescue.target					Set up rescue shell
+
+2 runlevel2.target, multi-user.target 				Set up non-graphical multi-user system
+
+3 runlevel3.target, multi-user.target 				Set up non-graphical multi-user system
+
+4 runlevel4.target, multi-user.target 				Set up non-graphical multi-user system
+
+5 runlevel5.target, graphical.target 				Set up graphical multi-user system
+
+6 runlevel6.target, reboot.target 					Shut down and reboot the system
+
+
+
+
+
+
+
+# dnf group install Workstation 					 To install Workstation environment
+
+# systemctl isolate graphical.target				 To change #systemd target in current session
+
+# systemctl set-default graphical.target			 To set graphical target as default #systemd target
+
+# cd /usr/lib/systemd/system 						 Directory containing #systemd units of installed packages
+
+# cd /etc/systemd/system 							 Directory containing local #systemd configurations
+
+# man systemd.unit 									 Manual page for #systemd units
+
+
+
+
+
+Note: rhel 6 uses sysinit as first process started when kernel is loaded 
+	  rhel 7/8 sysinit replace by systemd and in rhel8 systemd is first process started when kernel is loaded
+
+run level
+0				poweroff.target		shut down and poweroff the system
+1				resuce.target	or resuce shell
+2				multi-user.target or multi user target non-graphical
+3				multi-user.target	non-graphical
+4				multi-user.target	non-graphical
+5				multi.user.target	Graphical
+6				reboot.target shut down and reboot the system
+
+
+# dnf group install Workstation/"server with gui"			packages releated to graphical enviorment
+	Note: if you install minimal installtion then you need to install it
+
+
+# systemctl isolate graphical.target		it will boot system in greaphical in current session only. after reboot it back to default target. not persistent
+
+# systemctl set-default graphical.target	 set default systemd target persitent graphical.target
+
+# cd /usr/lib/systemd/system 				Directory containing systemd units of installed packages
+
+
+# cd /etc/systemd/system					 Directory containing local systemd configurations
+
+# man systemd.unit							 Manual page for systemd units
+
+
+# systemctl isolate multi-user.target		 multiuser in non graphical user in current session
+		or
+# systemctl isolate multi-user.target
+
+
+
+# dnf grouplist				list group packages
+workstation installed pacakges
+
+# dnf group install Workstation/"Server with GUI"
+
+# systemctl get-default
+graphical.target
+	
+
+# systemctl set-default graphical.target
+
+
+# cd /usr/lib/systemd/system
+
+system# ls -l
+
+# ls -l |  grep target
+see all targets and runlevels
+
+# cd /etc/systemd/system
+
+# ls -lrt			last modify file show in last
+default.target -> /usr/lib/systemd/system/graphical.target
+
+->its symblic link result of systemctl set-default graphical.target
+remove symbolic link
+
+/etc/systemd/system]# rm default.target
+
+set default tarte by creating symblic link
+
+
+# ln -s /usr/lib/systemd/system/multi-user.target /etc/systemd/system/default.target
+
+# ls -lrt			last modify file show in last
+default.target -> /usr/lib/systemd/system/multi-user.target		
+
+# systemctl get-default
+multi-user.target
+
+#systemctl set-default graphical.target
+
+
+# systemctl get-default
+graphical.target
+
+
+#sudo dhclient
+
+
+
+7) ❑ Schedule a script /test.sh as user lisa which should be executed every 15 minutes.
+
+*Script /test.sh should contian echo "I am lisa" > lisa
+
+* Create user lisa if does not exist and set password as password.
+
+# useradd lisa								to create user lisa
+			
+# passwd lisa								to set password for lisa
+
+/# vim /test.sh								to create script /test.sh
+echo "I am lisa" > lisa
+:wq
+
+# chmod +x /test.sh,chown lisa:lisa /lisa		providing execution rights to lisa on script and write permission on output file
+	
+
+# crontab -u lisa -e 						Open lisa’s crontab as root user for editing
+*/15 * * * * /test.sh						 Make entry in crontab file
+:wq Write and quit
+
+-u -> specific user
+-e -> edit crontab file
+
+# crontab -u lisa -l 						List crontab of user lisa
+
+
+the time and date fields are:
+1,2,4 		execute on 1, 2, 4
+3-6			3 to 6 duration execute
+*/15		every 15 minute
+field			allowed values
+-------------------------------
+minute				0-59
+hour				0-23
+day of month		1-31
+month				1-12 ( or names, see below)
+day of week			0-7(0 or 7 is Sunday , or use names)
+
+
+
+Note : System administrator(root) can restrict access to crontab for different users using /etc/cron.allow and   /etc/cron.deny files.
+
+if,
+
+/etc/cron.allow file exists , user must be listed in this file to use crontab.
+
+/etc/cron.deny exists , user must not be listed in this file to use crontab.
+
+Both files does not exist, only root user can use crontab.
+
+
+
+# id
+uid=0(root) gid=0(root) groups=0(root),10(wheel) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+# hostname
+system.example.com
+
+# useradd lisa
+
+# passwd lisa
+
+# vim /test.sh
+echo "I am lisa" > lisa
+:wq
+
+# cd /
+
+# # ./test.sh
+-bash: ./test.sh: Permission denied
+
+# chmod +x /test.sh 
+
+# ls -l test.sh 
+-rwxr-xr-x. 1 root root 24 Nov 22 22:55 test.sh
+
+
+# ./test.sh			lisa file created
+
+# ls -lrt
+-rw-r--r--.   1 root root   10 Nov 22 22:58 lisa
+
+
+# su - lisa
+
+$ cd /
+
+
+$ ./test.sh 
+./test.sh: line 1: lisa: Permission denied
+
+$ su -
+
+# chown lisa:lisa /lisa 			make user lisa owner and group owner
+
+# su - lisa
+[lisa@system ~]$ cd /
+[lisa@system /]$ ./test.sh 			first time exection fail run as user lisa becuse file lisa not created and user lisa don't permission to create file in root dir
+
+
+# ls -lrt
+-rw-r--r--.   1 lisa lisa   10 Nov 22 23:04 lisa
+
+[lisa@system /]$ more lisa 
+I am lisa
+
+$ su - root
+
+# systemctl status crond
+ crond.service - Command Scheduler
+active running
+
+# crontab --help
+ -u <user>  define user
+ -e         edit user's crontab
+ -l         list user's crontab
+ -r         delete user's crontab
+ -i         prompt before deleting
+
+
+
+# man crontab
+[root@system ~]# man 5 crontab 			how to shedule job minute man page
+
+root@system ~]# crontab -u lisa -e
+*/15 * * * * /test.sh
+
+
+# crontab -u lisa -l
+*/15 * * * * /test.sh
+
+# su - lisa
+[lisa@system ~]$ crontab -l				list user lisa crontab
+*/15 * * * * /test.sh
+
+
+$ su - root
+
+# cd /etc
+
+# ls -l | grep cron
+-rw-r--r--.  1 root root       541 Nov  8  2019 anacrontab
+drwxr-xr-x.  2 root root        39 Jun  8 03:03 cron.d
+drwxr-xr-x.  2 root root        23 Jun  8 02:59 cron.daily
+-rw-r--r--.  1 root root         0 Nov  8  2019 cron.deny#### deny file exist
+drwxr-xr-x.  2 root root        22 Jun  8 02:59 cron.hourly
+drwxr-xr-x.  2 root root         6 Jan 12  2021 cron.monthly
+-rw-r--r--.  1 root root       451 Jan 12  2021 crontab
+drwxr-xr-x.  2 root root         6 Jan 12  2021 cron.weekly
+
+
+
+# more /etc/cron.deny			empty file means no user mention here means every user has access crontab program
+								here mention user don't have access
+								
+					:-now no cron.allow or aron.deny file exist so only root user have acess to crontab program
+
+# rm /etc/cron.deny 
+rm: remove regular empty file '/etc/cron.deny'? y
+
+# cd /var/spool/cron/
+
+# ls -l									crontab file of differnt users
+total 8
+-rw-------. 1 ajay ajay 783 Nov  3 01:09 ajay
+-rw-------. 1 root root  22 Nov 22 23:13 lisa
+
+
+cron]# more lisa 
+*/15 * * * * /test.sh
+
+# cd /etc/cron.d
+
+cron.d]# ls -l						system wide crond files shedule and modify by root user only
+total 8
+-rw-r--r--. 1 root root 128 Nov  8  2019 0hourly
+-rw-r--r--. 1 root root 108 Aug 10 00:39 raid-check
+
+
+
+
+
+
+8) ❑ Schedule a script /test1.sh as user bob which should be executed 12:15 every Monday.
+
+• User bob should be allowed to use crontab.
+
+
+# vim /etc/cron.allow					 Open cron.allow file in editing mode
+bob 									List bob in cron.allow file
+:wq 									Write and quit cron.allow file
+
+# su - bob 								Switch to user bob
+
+# crontab -l 								List bob’s crontab
+
+# crontab -e 								Open crontab in editing mode
+15 12 * * 1 /test1.sh						 List this entry in crontab
+:wq											 Write and quit
+
+# crontab -l 								List bob’s crontab to verify cron job is scheduled
+
+
+
+
+
+
+
+# useradd bob
+
+# passwd bob
+
+# vim /test1.sh
+echo "My first cron job" > bob
+
+## setfacl -m u:bob:rwx /test1.sh
+-m -to modify
+u   -for user bob
+rwx -provide rwx permission on test1.sh file
+
+
+# cd /
+
+/]# ls -l test1.sh 
+-rw-rwxr--+ 1 root root 31 Nov 22 23:36 test1.sh
+
++  ->means access control list(ACL) configure on this file
+
+
+/]# getfacl test1.sh 
+# file: test1.sh
+# owner: root
+# group: root
+user::rw-
+user:bob:rwx						user bob has read write access on this file
+group::r--
+mask::rwx
+other::r--
+
+
+/]# touch /bob
+ /]# ls -l bob								userowner:group root
+-rw-r--r--. 1 root root 0 Nov 22 23:43 bob
+
+
+/]# setfacl -m u:bob:rwx /bob				provide usr bo read write access
+
+/]# getfacl /bob 
+getfacl: Removing leading '/' from absolute path names
+# file: bob
+# owner: root
+# group: root
+user::rw-
+user:bob:rwx							user bob has read write access on this file
+group::r--
+mask::rwx
+other::r--
+
+
+/]# su - bob
+[bob@system ~]$ cd /
+[bob@system /]$ ./test1.sh 
+[bob@system /]$ ls -l
+-rw-rwxr--+   1 root root   18 Nov 22 23:47 bob
+
+[bob@system /]$ more bob
+My first cron job
+
+
+[bob@system /]$ crontab -e										creae cron.allow file to allow user bob
+You (bob) are not allowed to use this program (crontab)
+See crontab(1) for more information
+
+
+]$ su - root
+Password: 
+
+
+# vim /etc/cron.allow			add user bob to allow use crontab program only bob and root allow to use crontab
+bob
+:wq
+
+# su - bob
+bob$
+
+[bob@system ~]$ crontab -e
+15 12 * * *  /test.sh
+:wq
+
+
+$ crontab -l
+15 12 * * *  /test.sh
+[bob@system ~]$ su - root
+Password: 
+
+
+root@system ~]# cd /var/spool/cron				list all cron job every user
+[root@system cron]# ls -l
+total 12
+-rw-------. 1 ajay ajay 783 Nov  3 01:09 ajay
+-rw-------. 1 bob  bob   22 Nov 22 23:53 bob
+-rw-------. 1 root root  22 Nov 22 23:13 lisa
+[root@system cron]# more bob 
+15 12 * * *  /test.sh
+
+
+
+8) ❑ Schedule below command using at to execute 30 minutes from now.
+
+ps -ef > process.txt
+
+• Check the queue of at jobs to verify.
+
+
+Command Action/Description
+
+# dnf install at 									Install package for atd if not installed already
+
+# systemctl start atd 							and systemctl enable atd To start and enable atd service
+
+# systemctl status atd.service					To check status of atd
+
+# at now + 30 minutes 							Execute at to schedule job
+at> ps -ef > process.txt 					    
+Ctrl+d											To save 												
+
+# atq											 Display at jobs queue (Pending jobs)
+
+atrm											 To delete jobs
+
+man at 											 Manual page for at
+
+
+
+
+at Jobs Scheduling						 Examples 						Description
+
+# at now + 30 minutes 					To schedule job to execute after 30 minutes from now
+
+# at now + 1 hour 						To schedule job to execute after 1 hour from now
+
+# at now + 2 days 						To schedule job to execute 2 days after from now
+
+# at 4pm + 2 days 						To schedule job to execute 2 days after from 4PM
+
+# at now + 3 weeks 						To schedule job to execute 3 weeks after from now
+
+# at HH:MM 								To schedule job at some specific time
+
+# at midnight 							To schedule job to execute at midnight
+
+# at noon 								To schedule job to execute at noon
+
+# at teatime 							To schedule job to execute at teatime (4pm)
+
+
+# systemctl status atd
+active vender preset enabled
+
+# at now + 30 minutes						shedule job after 30 minute
+warning: commands will be executed using /bin/sh
+at> ps -ef > process.txt
+at> <EOT>										ctrl+d   to save the job exit
+job 1 at Tue Nov 23 00:38:00 2021
+
+
+]# atq						display pending jobs with job id 1
+1	Tue Nov 23 00:38:00 2021 a root
+
+
+# atrm 1				to delete job with job id 1
+
+# atq		empty
+
+# at now + 30 minutes
+warning: commands will be executed using /bin/sh
+at> ps -ef > process.txt
+at> <EOT>
+job 2 at Tue Nov 23 00:42:00 2021
+
+# atq
+2	Tue Nov 23 00:42:00 2021 a root
+
+# man at
+
+
+
+
+10 ) ❑ Install the autofs service and configure to start at boot.
+
+Command Action/Description
+
+# dnf install autofs 				To install autofs service
+
+# systemctl start autofs 			To start autofs service
+
+# systemctl enable autofs 			To start autofs service at boot
+
+# systemctl status autofs 			To check status of autofs service
+
+
+
+# dnf whatprovides autofs				to kwnow about package what it do
+
+autofs-1:5.1.4-74.el8.x86_64 : A tool for automatically mounting and unmounting
+                             : filesystems
+
+# dnf install autofs
+
+enable -> after reboot it will start automatically
+vendor preset -> by default disable from vendor
+
+## systemctl status autofs
+● autofs.service - Automounts filesystems on demand
+   Loaded: loaded (/usr/lib/systemd/system/autofs.service; disabled; vendor pre
+
+
+# systemctl start autofs
+
+
+[root@system ~]# systemctl enable autofs
+
+Created symlink /etc/systemd/system/multi-user.target.wants/autofs.service → /usr/lib/systemd/system/autofs.service.
+
+[root@system ~]# systemctl status autofs
+● autofs.service - Automounts filesystems on demand
+   Loaded: loaded (/usr/lib/systemd/system/autofs.service; enabled; vendor pres>
+   Active: active (running) since Tue 2021-11-23 00:34:20 IST; 18s ago
+
+
+
+
+
+
+
+
+
+
+
+error:
+Fix rpmdb: Thread died in Berkeley DB library 
+
+ Solution
+
+Please follow these steps to backup and rebuild the rpmdb database:
+
+mkdir /var/lib/rpm/backup
+cp -a /var/lib/rpm/__db* /var/lib/rpm/backup/
+rm -f /var/lib/rpm/__db.[0-9][0-9]*
+rpm --quiet -qa
+rpm --rebuilddb
+yum clean all
+
+
+
+
+1)harware clock
+
+2)software clock / software clock/system clock
+synk time with harware clock during boot process
+
+
+NTP Server provides stable time syncronizing service
+
+12) ❑ Configure System to use NTP server configured on IPA Server (ipaserver.example.com).
+
+• Configure iburst option to make the initial synchronisation faster.
+
+chronyd service provide for NTP client and NTP Server funtionalit on rhel8
+ 
+ 
+Command 											Action/Description
+
+# systemctl status chronyd 								To check status of chronyd service
+
+# timedatectl set-timezone TIME_ZONE						 To set time zone
+
+# timedatectl set-time HH:MM:SS 							To set time
+
+# hwclock -w 												To sync hardware clock to system time if needed
+
+# vim /etc/chrony.conf									 To configure System to use NTP server (IPA Server)
+server ipaserver.example.com iburst
+:wq
+
+
+# systemctl restart chronyd Restart chronyd to make changes effective
+
+# vim /etc/chrony.conf								To enable IPA Server to serve as NTP source with stratum 10
+local stratum 10
+:wq 											
+
+# systemctl restart chronyd Restart service on IPA Server to make changes effective
+
+# chronyc sources Display chronyc sources on System
+
+
+
+
+system ~]# systemctl status chronyd
+active running enabled vendor preset enabled
+
+# timedatectl							system time
+
+]# hwclock								hardware clock time
+2021-11-23 13:14:06.085650+05:30
+
+
+# hwclock -r			current harware clock time
+
+# hwclock -w					 to sync hardware clock with systecm clock/software clock
+
+# hwclock --help
+
+# timedatectl set-time 12:50:00
+
+# chronyc sources					chronyc all  sources
+MS Name/IP address         Stratum Poll Reach LastRx Last sample               
+===============================================================================
+^+ ec2-13-126-27-131.ap-sou>     3   6   377     6   +994us[ +994us] +/-   75ms
+^* 165.22.211.200                4   6   377     7    +90us[ +296us] +/-   52ms
+^+ time.cloudflare.com           3   6   377    12   -737us[ -532us] +/-   68ms
+^- 45.86.70.11                   3   6   377     8    -12ms[  -12ms] +/-  199ms
+
+
+# vim /etc/chronyc.conf
+pool 2.centos.pool.ntp.org iburst										->internet connected server for time
+server freeipa.example.com iburst								added custom server
+
+# systemctl restart chronyd
+
+# chronyc sources -v
+MS Name/IP address         Stratum Poll Reach LastRx Last sample               
+===============================================================================
+^* 157.245.102.2                 2   6    17    16  -1596us[-2019us] +/-   15ms
+^- time.cloudflare.com           3   6    17    19  +2012us[+2012us] +/-   68ms
+^? 152.67.1.129                  3   6    30    19  +1306us[+1306us] +/-   96ms
+^? 2400:6180:100:d0::8d9:f0>     0   6     0     -     +0ns[   +0ns] +/-    0ns
+
+
+freeipa server move on
+freeipa # systemctl status chronyd active
+
+# timedatectl
+
+# hwclock
+
+# vim /etc/chrony.conf		add this allow ntp client from local network
+allow 192.168.0.0/24
+locat stratum 10			sever time if not synchronizeied to a time source
+:wq
+
+# systemctl restart chronyd
+
+# firewalll-cmd --list-all
+ntp on list
+
+
+system machine
+# systemctl restart chronyd
+
+# chronyc sources -v			system machine sync time with freeipa.example.com
+^* freeipa.example.com
+
+^  server
+*  current sync
+?  unreachable
+
+
+# timedatectl
+
+
+RTC(real time clock) / harware clock

@@ -1,0 +1,27 @@
+Employee line change agaian
+put line
+pot line
+pet line
+this is put middle.
+this is end put
+hii tabtabsomething
+Thi
+This space
+Thi space
+Thiss ^
+Thisss 
+Thissss
+Thisssss
+tabtab
+hii tabtab sequace
+practicepot 
+pyt \s
+hii pyt $ space before
+nospace
+dot line .
+tabtabtab
+3time tabtabtab
+nospace------
+tabspace	tab	tab
+\s word search escape characet
+ifter line 1 ============

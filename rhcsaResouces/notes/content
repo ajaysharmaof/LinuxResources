@@ -1,0 +1,1439 @@
+locate faster require db update:q
+find where is exact file if you know 
+ll 
+ll -R recrsively
+find /home/ -name "File01"
+find /home/ -iname "file01"   -i ignore case sensetive
+
+locate file
+updatedb
+locate --help
+locate -i file     -i ignore case sensetice
+locate -i file_			don't know full name
+locate -i /home file_t
+locate --help		-b basename of path name
+locate -b /home	link_te
+chmod 554 /home/ajay/Desktop newfile		1-execute(x) 2-write(w) 4-read(r)
+chmod +w newfile		+ - add or remove permission
+chmod --help 		-R rescursively
+chown --help	change owner and group of a file -v for verbose
+chown -v root demo_file		change owner of file to root
+chown -v root:root demo_file
+
+rm -rf demo/	 	-rf recrsively force delete folder
+	-f to ask for conformation it delete force directly
+	-i for conformation before every delete
+	-I prompt conformation once before delete more than 3 files
+	-r resusively delete folders
+cp source destination
+cp --help
+cp from to	copy
+cp demo downloads/
+mv from to	rename and move
+mv name	n
+ewname
+mv demo	downloads/
+
+echo "hey" > file1
+cat file1
+man echo
+
+echo "hey how yoo" | grep yoo		yoo in red
+echo "hey how yoo \nwhat going on \see yaa" > file1
+cat file1 | grep hey	hey line show hey in red
+cat file1 | gre[ =i wHat	case sensetive remove
+cat file1 | grep =i 192.168.4.2	
+
+yum --help
+yum -C repolist			-C stop extra thing do the operation
+yum update
+yum upgrade
+yum search sql		to look for packages
+yum reinstall gedit
+yum info gedit		to get more info about package
+yum info sql
+yum info mariadb
+yum remove mariadb	to remove a package
+yum remove gedit
+yum search sql | grep -i maria
+rpm --help
+rpm -q nmap4.4		query package
+package not installed
+
+rpm -iv nmap4.4.rpm	-iv install and verbose
+
+rpm -q nmap4.4
+nmap4.4				installed
+
+rpm -e nmap4.4
+rpm -q nmap 4.4			remove package
+package not installed
+
+rpm --help | grep "\-e"		-e erase package
+
+
+#links
+softlinks:- differetn name of orignal file. or only link.file remove link doesn work, Each soft linked file contains a separate Inode value that points to the original file.
+
+$ ln -s softL linktoSoft
+ linktoSoft -> softL
+
+hardlink:-  Every file on the Linux filesystem starts with a single hard link. differnt hardlink point same storage inode 
+they can only be created for regular files (not directories or special files). Also, a hard link cannot span multiple filesystems. They only work when the new hard link exists on the same filesystem as the original
+
+$ ln softL Hardlink
+
+$ ls -li
+9288015 -rw-rw-r--. 2 ajay ajay    16 Nov  2 05:19  NewHardLink
+9288015 -rw-rw-r--. 2 ajay ajay    16 Nov  2 05:19  softL
+
+#tail-> wait for change in file it will show in real time with -f
+$ tail -f content 
+
+new tab
+$ echo "hii new line" >> content
+
+$ clear && cat -n demo | grep 6		->it grep 6 line
+     6	850
+
+
+#tar:-
+$ tar -cvpzf [output.tar.gz] [file or directory to be archived]
+
+$ tar -cvpzf backup.tar.gz /home/ajay/Desktop/BaSH/practice
+
+-c : Creates Archive if exist overwrite
+-v : Displays Verbose Information 
+-p : perserve permission on files( if we move archive to another system)
+-z :zgip (compress file)zip, tells tar command that creates tar file using gzip 
+-f : creates archive with given filename 
+
+$ tar -cvf file.tar *.py
+$ tar -cvpzf backup1.tar.gz .
+
+
+#uncompress gzip(-z):
+-C ->Untar a file in current directory or in a specified directory using -C option
+
+$ tar -xvf file.tar -C bk/
+$ tar -xvpzf file.tar.gz -C /home/ajay/Desktop/BaSH/practice/bk
+$ tar -xvpzf backup1.tar.gz -C .
+
+-x : Extract the archive 
+-t : displays or lists files in archived file 
+-r : update or add file or directory in already existed .tar file 
+
+$ tar -tvf file.tar.gz		-> to list all file overview all files
+$ tar -tf file.tar.gz  
+
+$ ll -lh tarball.tar	->check size of file it make small
+$ bzip2 tarball.tar	-> 65M compress it
+$ ll -lh tarball.tar.bz2  -> 42M
+
+uncompress
+$ bunzip2 tarball.tar.bz2
+
+$ tar rvf file.tar newfileadded newfile	-> add morefile in existing tar file
+
+$ tar tvf file.tar  ->list the contents and specify the tarfile using option -tf
+$ tar tvf file.tar | grep "text find in files"
+$ tar tvf file.tar | grep "filename.file extension"
+
+$tar tvf file.tar seachthisfile ->We can pass a file name as an argument to search a tarfile
+
+To search for an image in .png format :
+$ tar tvf file.tar --wildcards '*.png'
+
+$ tar -cvf tarBall.tar .->archive file putiing multiple file into single file
+$ ll -lh tarBall.tar 	->SHOW SIZE
+$ bzip2 tarBall.tar 	->compress file
+$ ll -lh tarBall.tar.bz2
+$ tar -tf tarBall.tar .	->verify or see all files
+$ ll -lh tarball.tar
+$ bzip2 tarball.tar
+$ ll -lh tarball.tar.bz2  -> size is reduced
+$ bunzip2 tarball.tar.bz2	->unzip
+
+#bzip2 best compression ratio
+#gzip or zip  not quit compare to bunzip2
+#7zip quite good compress ration 
+-j : filter archive tar file using tbzip 
+This command compresses and creates archive file less than the size of the gzip. Both compress and decompress takes more time then gzip.  
+
+$ tar cvfj file.tar.tbz example.cpp
+$ tar xvfj file.tar -C path of file in directory 
+
+$ tar jxvf file2.tar.tbz "fileA" "fileBi"
+
+
+$ tar -cf myfile.tar file.txt abc.jpg
+$ tar -xf myfile.tar
+$ du		->disk usage
+$ du -h abc,jpg		-> file sze 
+$ du -hc abc.jpg	->give total size 
+
+compress using gzip:-
+$ gzip abc.jpg		->abc.jpg.gz
+$ du -h abc.jpg.gz
+$ gunzip abc.jpg.gz
+$ tar -cvf file.tar 1 2 4 dir1 dir2 dir3
+
+
+
+#cronjob
+
+$ crontab -e
+$ crontab -u ajay -e
+$ crontab -u ajay -l	-> to list cronjob
+$ service crond restart 
+
+
+MIN	HOUR	DOM	MON	DOW	CMD
+0-60	0-23	1-31	1-12	0-6	echo "hello"
+
+*	*	*	*	*	/home/ajay/Desktop/BaSH/practice/demo.sh
+#!/bin/bash
+touch /home/ajay/Desktop/BaSH/practice/newfile.$(date +%T-%F)
+
+$ tail -f /var/log/cron		->see log message of cron
+$ tail -f /var/log/message	
+$ cd /var/log/
+$ vim /etc/crontab
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+
+
+ etc]$ ls | grep cron
+anacrontab
+cron.d
+cron.daily
+cron.deny	->insert username to deny user deny a particular user to run job
+cron.hourly
+cron.monthly
+crontab
+cron.weekly
+
+Note:#cron.allow make a file for specif allow user define
+
+
+       @reboot    :    Run once after reboot.
+       @yearly    :    Run once a year, ie.  "0 0 1 1 *".
+       @annually  :    Run once a year, ie.  "0 0 1 1 *".
+       @monthly   :    Run once a month, ie. "0 0 1 * *".
+       @weekly    :    Run once a week, ie.  "0 0 * * 0".
+       @daily     :    Run once a day, ie.   "0 0 * * *".
+       @hourly    :    Run once an hour, ie. "0 * * * *".
+
+
+
+
+
+
+#user group creation:
+-r 	-> crate system account
+/etc/shadow	->stored encryptd password
+/etc/passwd
+$ cat /etc/shadow | grep adam && cat /etc/passwd | grep adam
+
+-e ->  expiration date of the new account
+-M -> do not create the user's home directory
+-u, --uid UID                 user ID of the new account
+-g, --gid GROUP               name or ID of the primary group of the new account
+
+
+
+$ useradd -c "Adam Cole" adam
+$ passwd adam
+$ passwd -e adam  =>password need force change require during next login attempt
+$ passwd -e 2021-12-12 adam => password expire specific date
+$ passwd -S adam	->-S status of password
+
+-d -> delete a password for an account
+-l -> Lock the password of System User
+-u -> Unlock User’s Password using -u option
+-n -> Setting Minimum No.of Days to Change Password using passwd -n option
+-w -> Setting the  Warning days before password expire using passwd -w option
+
+# passwd -d user1
+# passwd -l user1
+# passwd -u user1
+# passwd -n 90 user1	->minimum day to change password n=0 change any time-w
+# passwd -w 30 user1
+# chage -l user1	->get info about user password expireation date
+
+-i -> Setting inactive days using -i option
+# passwd -i 7 user1
+when password of user  expired and user didn’t change its password in ‘n‘ number of days ( i.e 7 days in my case)  then after that user will not able to login.
+
+passwd --help
+groupadd --help		=>conf file /etc/login.defs
+cat /etc/login.defs 	-> custom conf file create home, password length expeire date uid gid 
+
+# groupadd sales
+# cat /etc/group 	->list groups
+$ cat /etc/passwd | grep adam
+$ id adam	->to check user all group added in which
+$ usermod --help
+$ sudo usermod -aG market adam	->add adam to secondary group
+$ sudo usermod -g  accounts adam -> add accounts group as primay group of adam
+$ id adam
+$ sudo usermod -G adam adam ->user adam added seconday group as adam added
+$ sudo usermod -aG market adam -> append -a seconday group market to user adam
+$ id adam
+$ usermod -s /bin/tcsh adam -> change the adam user tenex c shell
+$ cat /etc/passwd | grep adam
+
+$ sudo groupdel market -> delete group market
+$ vim /etc/group	-> add group manually
+$ id adam
+
+$ userdel --help
+$ sudo userdel -r mike	->remove user -r remove home directory and mail spool
+$ groupdel adam
+-f       -			force some actions that would fail otherwise
+                                e.g. removal of user still logged in
+                                or files, even if not owned by the user
+
+$ man ifconfig
+$ ip addr show
+$ ip tabtab
+
+interface name change 3 way
+1> using NIC(network integrated card)
+2> USB Adapter
+3> Bios naming
+4> eth0 eth1 eth2 eth3
+
+$ ip link show -> show interfaces
+$ ip -s link   ->statistic of link interfaces packets etc.
+
+$ ip route show -> 192.168.0.0/24 router that pass traffic throuh src->source ip of computer
+192.168.0.0/24 dev enp0s3 proto kernel scope link src 192.168.0.14 metric 100 
+
+$ ip addr show enp0s3
+$ ip addr show enp0s3 | grep "inet "
+
+$ ip addr help
+$ sudo ip addr add 192.168.142.35 dev enp0s3 ->add another ip address
+$ sudo ip addr del 192.168.142.35 dev enp0s3 -> delete ip address
+
+$ ip tabtab
+$ ip link tabtab	->to see options
+$ nmcli connection down enp0s3	->connection down and secondary ip also gone
+$ nmcli connection up enp0s3 ->connection up because changes are not persistent
+$ ip addr show
+
+$ cd /etc/sysconfig/network-scripts/
+$ ls	->ifcfg-enp0s3
+
+$ cat /etc/resolv.conf 
+# Generated by NetworkManager
+nameserver 124.40.244.216	->these are open dns server 
+nameserver 8.8.8.8
+
+#persistent changes
+$ vim /etc/sysconfig/network-scripts/ifcfg-enp0s3
+
+add these 2 open dns server
+
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+
+IPV6_FAILURE_FATAL=no
+NAME=enp0s3
+UUID=fca59077-ee37-4df1-8c50-73f18446b874
+DEVICE=enp0s3
+ONBOOT=yes
+
+add these link to make connection static remove dhcp
+BOOTPROTO="static"
+NM_CONTROLLED="yes"
+IPADDR=192.343.34.323
+NETMASK=255.255.255.0
+DNS1=8.8.8.8
+DNS2=8.8.4.4
+
+$ systemctl restart NetworkManager
+connection is persitent
+
+make new connection
+$nmtui		->gui->edit
+
+$ ping google.com	->conf messup
+ping :unknown host google.com
+
+$ systemctl restart NetworkManager
+
+$ netstat -tulpen	-> see listening port 
+$ netstat | grep tcp
+$ netstat
+$ nslookup google.com
+$ dig google.com
+			
+$ nmap 192.168.0.14 -p 80 -vv
+$ nmap 192.168.0.14 -p 22 -vv  ->22 ssh port
+
+#ssh
+$ sudo yum install ssh
+$ sudo iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
+-I  insert  input
+1   at postion 1
+-p  specific a protocol tcp for packates
+--dport  destination port at port 22 
+-j   system to do accept
+
+ $ sudo iptables -L INPUT
+target     prot opt source               destination         
+ACCEPT     tcp  --  anywhere             anywhere             tcp dpt:ssh
+
+
+
+#ssh
+$ vim /etc/ssh/ssh_config	->set these in file
+RSAAuthentication yes
+PubkeyAuthentication yes
+AuthorizedKeysFile	.ssh/authorized_keys
+PasswordAuthentication yes		#->also it can be disable set no
+PermitRootLogin no
+
+
+$ echo "" > /home/ajay/.ssh/authorized_keys    -> remove old keys
+$ssh-keygen
+$ ssh-copy-id ajay@192.168.0.7
+$ systemctl restart sshd
+$ ssh ajay@192.168.0.7
+$ ssh-add	->to add ssh idtentity ssh agent error resolve
+
+$ scp demofile ajay@192.168.0.7:/home/ajay/Desktop/BaSH ->copy file on remoter server from local machine
+
+
+#partioning:
+$ sudo fdisk -l		=>list partions and there size
+$ cat /proc/partitions
+$ ls /proc
+$ cat /proc/iomem   -> input output memoery kernel write in this file
+$ sudo fdisk -l /dev/sda	->see sda partion table
+
+# make partions
+$ fdisk /dev/sdb
+(m for help)	-for help
+(m for help) : x	=>expert command 
+(m for help) : m
+(m for help) : p 	=>print th partition table
+(m for help) : l	->list known partion 8e linux lvm, 83 linux 
+(m for help) : n	-> new partion [p-primary e-extended]
+select (default p) : p 
+partion number (1-4 , default 1) : 1
+first sector(2048-53423323, default 2048) : enter default
+last sector, +secortor or size{K,M,G} (2048-53423323,default 53423323): +5G 
+
+command (m for help) : m	help 
+command (m for help) : p
+
+
+command (m for help) : d 	delete partion
+selected partition 1
+partition 1 is deleted
+
+command (m for help) : n	new partion
+select (default p) : p		primay
+partion number (1-4 , default 1) : enter
+first sector(2048-53423323, default 2048) : enter default
+using default value 2048
+last sector, +secortor or size{K,M,G} (2048-53423323,default 53423323): +5G
+
+command (m for help) : n        new partion
+select (default p) : p          primay
+partion number (2-4 , default 2) : enter
+first sector(20482332-53423323, default 20482332) : enter default
+using default value 20482332
+last sector, +secortor or size{K,M,G} (20482332-53423323,default 53423323): +5G
+
+command (m for help) : n        new partion
+select (default p) : p          primay
+partion number (3-4 , default 3) : enter
+first sector(34482332-53423323, default 34482332) : enter default
+using default value 34482332
+last sector, +secortor or size{K,M,G} (20482332-53423323,default 53423323): +5G
+
+command (m for help) : w	write the changes and quit
+
+$ fdisk -l /dev/sdb
+3 partion show
+
+
+#format partion:
+
+$ mkfs tabtab
+mkfs.btrfs mkfs.xfs 	->btrfs is undelte or get back deleted file
+
+$ mkfs.xfs --help
+$ mkfs.xfs -L	spoon /dev/sdb2		-> -L -add label
+partion format and label xfs
+
+$ lsblk -a
+$ lsblk -o name,label,size		->to see the output disj
+$ fdisk -l
+
+
+#mount partion:
+$ mount /dev/sdb2 /mnt		=>sdb2 mounted on /mnt
+$ cd /mnt/
+$ ls
+$ mkdir hey
+$ ls
+$ cd ..
+$ umount /dev/sdb2 	->name of partion
+	or
+$ unmount /mnt
+$ cd /mnt/
+$ ls			nothing
+mnt $ mkdir udemy
+    $ ll
+    $ mount /dev/sdb2 /mnt/udemy/
+    $ ls
+     hey		file stil exist on dist nomatter where mount
+    $ cd ..
+    $ unmount udemy
+
+#make partion persitent
+
+$ blkid			to see label and uuid of partions
+
+$ vim /etc/fstab	add this
+LABEL=spoon	/mnt/udemy	xfs	defaults,x-systemd.device=0	0	0 
+					mount options defaults
+
+$ mount -a			mount everything that mountable
+$ cd /mnt/udemy/
+$ ls
+$ mount | grep /dev/sdb2
+/dev/sdb2 on /mnt/udemy
+
+$ cd ..
+$ umount udemy
+$ mount -a			to mount
+
+
+
+#xfs		change attribution of partion change label set uuid 
+$ xfs tabtab
+$ xfs_admin --help
+$ man xfs_admin
+$ xfs_admin -L Earths /dev/sdb2				=>change label
+new label = "Earths"
+
+$ blkid 
+$ blkid | grep /dev/sdb2
+/dev/sdb2 	LABEL="Earths"
+
+$ vim /etc/fstab			add this
+LABEL=Earths	/mnt/udemy
+$ mount -a
+$ mount | grep /dev/sdb2
+
+#mount usb
+$fdisk -l		find usb
+$ same as preivous 
+$ fdisk /dev/usb
+.....
+
+
+#Lvm(Linux volume management):
+$ df -h			disk free(df) available space on partion
+$ fdisk -l		change system Linux->Lvm
+$ fdisk /dev/sdb
+command (m for help); t
+partion number (1,2, default 1): 1
+Hex code (type L to list all codes): L  8e linux lvm
+Hex code (type L to list all codes): 8e
+change type of partion Linux to Linux LVM
+
+command (m for help); t
+partion number (1,2, default 2): 2
+Hex code (type L to list all codes): L  8e linux lvm
+Hex code (type L to list all codes): 8e
+change type of partion Linux to Linux LVM
+command (m for help); w			write
+
+$ fdisk -l
+changed to Linux Lvm
+
+$ fdisk /dev/sdb
+
+command (m for help); t
+partion number (1,2, default 2): 2
+  8e linux lvm
+Hex code (type L to list all codes): 8e
+change type of partion Linux to Linux LVM
+
+command (m for help); t
+partion number (1,2, default 2): 2
+  8e linux lvm
+Hex code (type L to list all codes): 8e
+change type of partion Linux to Linux LVM
+
+command (m for help); w   
+
+$ sudo fdisk -l 		changed to Linux LVM
+
+File System
+
+Logical Volumes	lvcreate -n	       -
+volume group	vgcreate		|
+physical volumes pvcreate /dev/		|=> LVM
+			       -
+storage devices
+
+$ sudo fdisk -l
+
+Phical Volume
+$ sudo pvcreate /dev/sdb1
+	or phical voulume /dev/sdb1 created
+$ sudo pvcreate /dev/sdb[1,2]
+sdb1 sdb2 created
+
+Volume Group
+$ vgcreate Lyra /dev/sdb1 /dev/sdb2
+Volume group "Lyra" created
+
+$ vg tabtab
+$ vgdisplay 
+volume group Lyra
+lvm2 format resizable
+VG size 	14.99GB
+VG UUID GDKSGK-KDGJKJ-KJDGFD
+
+Logical VOlume
+$ lvcreate -n LyraJR -L  11G 
+Logical VOulume LyraJR created
+-n -	new lv create
+-L -	Lagre Size
+
+$ lvdisplay
+LV Path	- /dev/Lyra/LyraJR
+LV Name - lyraJR
+VG Name - Lyra
+LV Size - 11G
+
+$ vgdisplay
+Alloc PE/Size 	2916 / 11,00 GiB
+
+# to use lv we need to format lv then and mount them
+$ lvdisplay
+  .dev/Lyra/LyraJR	->VG=Lyra, LV=LyraJR , path of LV
+
+$ mkfs.xfs /dev/Lyra/LyraJR
+
+create mount point
+$ cd /mnt/
+$ mkdir logicalVolume01
+$ ll
+$ mount /dev/Lyra/LyraJR /mnt/logicalVolume01
+mnt/$ cd logicalVoume01
+
+$ ls
+$ mount
+$ df -h
+/dev/mapper/Lyra-LyraJR" /mnt/logicalVolume01
+
+$ umount /dev/Lyra/LyraJR
+$ df -h		->its unmounted and gone
+
+
+#resize LV Logical Volume
+$ mount /dev/Lyra/LyraJR /mnt/logicalVolume01
+$ df -h
+/dev/mapper/Lyra-LyraJR" /mnt/logicalVolume01 11G
+
+$ lvresize -L 14G /dev/Lyra/LyraJR		resize LV
+$ df -h				not showing size,  need to resize FS
+/dev/mapper/Lyra-LyraJR" /mnt/logicalVolume01 11G
+	
+$ xfs tabtab		->xfs_growfs
+	or 
+$ resize tabtab
+
+$ xfs_growfs /dev/Lyra/LyraJR	->Changein xfs file system size
+$ df -h
+/dev/mapper/Lyra-LyraJR" /mnt/logicalVolume01 14G
+
+$ vg tabtab  ->vgextend,vgrename,vgremove,vgreduce	to add more device or extend volume group vg
+
+$ vgrename tabtab
+Lyra
+
+$ vgrename Lyra Lyra1	->rename vg volume group
+
+#resize LV- logical volume or shrink
+
+$fdisk /dev/sdb
+command (m for help) : n        new partion
+select (default p) : p          primay
+partion number (3-4 , default 3) : enter
+first sector(20482332-53423323, default 20482332) : enter default
+using default value 20482332
+last sector, +secortor or size{K,M,G} (20482332-53423323,default 53423323): +5G
+partion 3 type linux created
+
+command (m for help); t			type
+partion number (1-3, default 3): 3
+Hex code (type L to list all codes): L  8e linux lvm
+Hex code (type L to list all codes): 8e
+change type of partion Linux to Linux LVM
+command (m for help); w                 write
+partion table is altered
+
+$ partprobe	->force kernel to reread the partion table
+
+$ fdisk -l /dev/sdb
+/dev/sdb3 5G linux Lvm
+
+create PV phical volume
+$ pvcreate /dev/sdb3
+phical volume /dev/sdb3 created
+
+to exted VG volume group
+$ vg tabtab	vgextend
+
+$ vgextend Lyra1 /dev/sdb3
+Volume Group Lyra1 exteded  successfully
+
+$ vgs
+Vg	PV	LV	VSize	
+Lyra1	3	1	19.99g
+
+reduce VG volume group
+$ vgreduce Lyra1 /dev/sdb3
+Removed "/dev/sdb3" from volume group Lyra1
+
+$ vgs
+Vg      PV      LV      VSize
+Lyra1   2       1       14.99g
+
+$ vgextend Lyra1 /dev/sdb1
+Volume Group Lyra1 exteded  successfully
+
+$ vgs
+Vg      PV      LV      VSize	VFree
+Lyra1   3       1       19.99g  5.99g
+
+$ lvs		logical voume
+LV	VG	LSize
+LyraJR	Lyra1	14.00g
+
+Create LV logical VOlume
+# lvcreate -L 4G -n NEW Lyra1
+Logical Volume "NEW" creted
+
+shrinking- xfs doesnot support shrinking ext4 support shrinking
+$ mkfs.ext4 /dev/Lyra1/NEW		format with ext4
+
+$ cd /mnt
+$ mkdir Name
+$ mount /dev/Lyra1/NEW /mnt/Name
+
+$ df -h
+/dev/maCpper/Lyra1-NEW	3.9G /mnt/Name
+
+
+#resize Volume or shrinking
+$ df -h
+/dev/mapper/Lyra1-NEW   3.9G /mnt/Name
+
+$ umount /mnt/Name	unmount first reduce size
+
+RESIZE FS
+$ resize2fs /dev/Lyra1/NEW	
+PLEASE RUN "e2fsck -f /dev/Lyra1/NEW"  	first
+
+$ erfsck --help 	-f -force check even if filesystem is marked clean
+
+$ e2fsck -f /dev/Lyra1/NEW
+check pass1 ... pass5 checking ionode block and sizes
+
+RESIZE FS
+$ resize2fs /dev/Lyra1/NEW
+
+:-reduce logical volume size before reduce filesystem size so first reduce FS size run resize3fs upper commadn
+
+$ lvreduce -L 1G /dev/Lyra1/NEW 
+waring reducing active Logical Volume to 1Gib
+This may Destroy your data (filesystem etc)
+yes confirm
+LV resized successfully from 4.00G to 1.00Gib
+
+$ mount /dev/Lyra1/NEW /mnt/Name
+
+$ df -h
+filesystem		size	 used 	mount
+/dev/mapper/Lyra1-NEW	880M	 11M  	/mnt/Name
+
+
+#LUKS-Linux unified key system  way to encryted drive add layer in security
+
+poweroff vm->storage->controller:SATA->add hard disk->create new hard disk
+poweronn VM
+
+$ sudo fdisk -l
+/dev/sdc	new created hard disk
+
+
+first create New VG volume group
+
+$ vgcreate LUKS_GROUP /dev/sdc
+physical voume "/dev/sdc" successfully created
+volume group "LUKS_GROUP" successfully created
+
+LV create	-n name it
+$ lvcreate -n LUKS lv_LUKS -L 7G LUKS_GROUP
+logical volume "lv_LUKS created
+
+$ lvs
+LV		VG		LSize
+lv_LUKS		LUKS_GROUP	7.00G
+
+$ vgs
+VG		PV	LV	VSize
+LUKS_GROUP	1	1	8.00g
+
+$ cryptsetup --help
+-y verify passphrase
+luksForamt 	->format LUks device
+-v -verbose output 
+-y- ask confermation 
+$ cryptsetup -v -y luksFormat /dev/mapper	tabtab
+LUKS_GROUP-lv_LUKS
+
+$ cryptsetup -v -y luksFormat /dev/mapper/LUKS_GROUP-lv_LUKS
+overwrite data or format on /dev/mapper/LUKS_GROUP-lv_LUKS  irrevocably
+yes
+enter passphrase: lukspassword
+verify passphrase: lukspassword
+command successful
+
+$ cryptsetup luksOpen /dev/mapper/LUKS_GROUP-lv_LUKS LUKS
+passphrase:
+
+created FS
+$ mkfs.xfs /dev/mapper/LUKS		LUKS IS NAME WE GIVE
+
+#mount 
+$ mkdir /mnt/LUKS_PLACE
+$ mount /dev/mapper/LUKS /mnt/LUKS_PLACE/
+
+# EDIT CRYTAB
+$ vim /etc/crypttab		add this
+
+LUKS /dev/mapper/LUKS_GROUP-lv_LUKS none
+ ^		^
+ |		|
+NAME		MAPPER
+
+$ vim /etc/fstab		add this
+/dev/mapper/LUKS	 /mnt/LUKS_PLACE	xfs	defaults,x-systemd.device-timeout=0	0 0
+
+$ df -h
+/dev/mapper/LUKS	7.G /mnt/LUKS_PLACE
+$ reboot
+enter passphrase for disk for disk LUKS_GROUP-lv_LUKS(LUKS) on /mnt/LUKS_PLACE
+
+$ df -h
+/dev/mapper/LUKS        7.G /mnt/LUKS_PLACE
+
+
+#web server Apacahe
+
+$ yum search apche | grep -i webserver
+httpd.x86_64
+
+$ yum install httpd.x86_64
+$ systemctl status httpd
+$ systemctl start httpd
+$ cd /var/www/
+]$ ls
+cgi-bin  html
+
+$ ifconfig
+$ dhclient		to turn on internet
+$ hostname -I | awk '{ print $1 }'
+192.168.0.8
+
+
+$ vim /etc/httpd/conf/httpd.conf 
+ServerRoot "/etc/httpd"
+Listen 192.168.0.8:80
+#Listen 80
+Include conf.modules.d/*.conf	in this folder include other conf modules like php.conf
+
+ServerAdmin root@localhost	enter your email here to send report to admin if anything proble happen
+
+DocumentRoot "/var/www/html"
+<IfModule dir_module>
+    DirectoryIndex index.html
+</IfModule>
+
+
+html]$ vim index.html
+
+$ systemctl reload httpd	reload conf files
+$ systemctl restart httpd
+$ sudo iptables -I INPUT 1 -p tcp --dport 80 -j ACCEPT
+-I insert 	-p protocol	-j accept 	all traffic
+
+		or
+$ sudo firewall-cmd --permanent --zone=public --add-service=http
+$ sudo firewall-cmd --permanent --zone=public --add-service=https
+$ sudo firewall-cmd --reload
+success
+$ sudo firewall-cmd --list-all | grep services
+  services: cockpit dhcpv6-client http https ssh
+open browser from another machine and ping 192.168.0.8
+
+$ iptables -L
+#$ iptables -F		flush the rules allow all traffic don't do this
+
+$ netstat -tulpn		check port 80 listen httpd
+
+#part2
+$ yum install nmap
+$ nmap 192.168.0.8		scan ports
+
+$ sudo systemctl stop httpd.service
+$ nmap 192.168.0.8 -vv -p 80		scan port 80
+port closed
+
+
+#text based brower
+$ yum search elinks
+$ sudo yum repolist --all
+powertools repo
+
+tempary enable powertool repo and install elinks
+$ sudo yum install --enablerepo=powertools elinks -y
+$ elinks http://192.168.0.8
+
+#ftp server
+$ sudo yum install vsftpd ftp
+anonymous_enable=YES
+local_umask=022
+# You may fully customise the login banner string:
+#ftpd_banner=Welcome to blah FTP service.
+
+#$ sudo systemctl enable vsftpd --now
+	or
+$ systemctl start vsftpd
+$ systemctl enable vsftpd
+$ systemctl status vsftpd
+
+$ sudo firewall-cmd --permanent --add-service=ftp
+success
+$ sudo firewall-cmd --reload
+success
+
+from browser ping to check ftp working or not
+ftp://192.168.0.8
+it show pub folder
+
+$ cd /var/ftp/pub/
+$ ll	empty
+$ cal > calander.txt
+
+from browser ping to check ftp working or not
+ftp://192.168.0.8 	you can see new file in pub folder
+
+login anonyoums in ftp machine from command line interface
+$ ftp localhost
+Name (localhost:ajay): anonymous
+password:	random password ajay@123
+login successful
+ftp> ls
+drwxr-xr-x    2 0        0              51 Nov 13 16:52 pub
+
+ftp> cd pub
+ftp> ls
+-rw-r--r--    1 0        0             168 Nov 13 16:52 calander.txt
+
+ftp> bye
+221 Goodbye.
+
+login as local nomal user in ftp server
+
+
+Name (localhost:ajay): ajay
+$ su - ajay
+$ ftp localhost		in system user case home directory of user is use
+Name (localhost:ajay): ajay
+password:	user ajay password
+ftp> ls			user home file show
+ftp> bye
+
+#put get command 
+
+another machine run this
+$ ftp 192.168.0.8		on windows
+Name (192.168.0.8:ajay): anonymous
+password:	random password 123
+ftp>ls
+-rw-r--r--    1 0        0             168 Nov 13 16:52 calander.txt
+ftp> get calander.txt		download this file locally
+ftp> mget f1 f2 f3		download multile file
+ftp> put file.txt		upload file from local machine to ftp server
+ftp> mput file.txt
+ftp>bye
+
+login as ftp user ajay in windows or any machine:
+$ ftp 192.168.0.8
+Name (192.168.0.8:ajay): ajay
+password:     password of ajay system user that created on ftp server
+ftp>	now you can access of all user ajay home dir content from any system
+login success
+ftp > mget f1 f2 	download multiple file
+ftp > put file.txt	upload file on ftp server
+ftp> bye
+
+login on other liux machine ftp server
+$ yum install -y ftp
+$ ftp 192.168.0.8
+Name (192.168.0.8:ajay): ajay
+password:     password of ajay system user that created on ftp server
+ftp>    now you can access of all user ajay home dir content from any system
+login success
+ftp > mget f1 f2        download multiple file
+ftp > put file.txt      upload file on ftp server
+ftp> bye
+
+
+login anonymous
+Name (192.168.0.8:ajay): anonymous
+password:     password look like email any password abc@gmail.com
+ftp>    now you can access of all user ajay home dir content from any system
+login success
+ftp > mget f1 f2        download multiple file
+ftp > put file.txt      upload file on ftp server
+ftp> bye
+     
+open ftp in brower
+ping  ftp://192.168.0.8	on browser it show pub directory of ftp server login as anonymous user 
+
+disable anonymous user login
+$ vim /etc/vsftpd/vsftpd.conf 
+anonymous_enable=NO		set no it will disable anonymous login
+
+$ sudo systemctl restart vsftpd
+login now in browser ftp://192.168.0.8 
+it will ask username and password to access files not anonymous user
+only available user on ftp server
+it open home directory of ftp user not pub directory
+
+change pub directory of user not show home directory 
+$ mkdir /ftp
+$ sudo vim /etc/vsftpd/vsftpd.conf 
+anonymous_enable=YES		add this two lines
+anon_root=/ftp
+$ sudo systemctl restart vsftpd
+$ ftp localhost
+Name (localhost:ajay): anonymous
+password:	random password
+ftp> ls			selinux is blocking access not allowing 
+(but failed to open directory)
+ftp>bye
+
+$ ls -ldZ /var/ftp/		see selinux context for pub folder of ftp
+drwxr-xr-x. 2 root root system_u:object_r:public_content_t:s0 51 Nov 13 22:22 /var/ftp/pub/
+:public_content_t:	selinux context
+
+$ ls -ldZ /ftp
+drwxr-xr-x. 2 root root unconfined_u:object_r:default_t:s0 6 Nov 13 23:30 /ftp
+default_t
+
+we have to change it selinux context
+$ sudo chcon -t public_content_t /ftp
+-t targeted , context pathof dir
+
+
+$ ls -ldZ /ftp
+drwxr-xr-x. 2 root root unconfined_u:object_r:public_content_t:s0 6 Nov 13 23:30 /ftp
+public_content_t 
+
+$ ftp localhost
+Name (localhost:ajay): anonymous
+password:       random password
+ftp> ls  
+allowing se linux 	create some file in /ftp folder
+ftp>bye
+
+$ sudo touch {1..10}.txt
+$ ftp localhost
+Name (localhost:ajay): anonymous
+331 Please specify the password.
+Password:
+230 Login successful.
+ftp> ls
+-rw-r--r--    1 0        0               5 Nov 13 18:16 demo
+-rw-r--r--    1 0        0               0 Nov 13 18:20 1.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 10.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 2.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 3.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 4.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 5.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 6.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 7.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 8.txt
+-rw-r--r--    1 0        0               0 Nov 13 18:20 9.txt
+ftp>bye
+
+turn off /ftp public folder move back to default for anonymous usr
+$ sudo vim /etc/vsftpd/vsftpd.conf 
+#anon_root=/ftp			comment this line
+$ sudo systemctl restart vsftpd
+	
+$ wget ftp://192.168.0.8/pub/hii
+$ lftp 192.168.0.8
+pub
+$ lftp ajay@192.168.0.8
+home dir of ajay
+
+
+
+
+
+#VNC(virtual network computing) use remote destop
+$ sudo dnf groupinstall "workstation"
+	or
+$ sudo dnf groupinstall "Server with GUI"
+	or
+#$ sudo yum groupinstall "Server with GUI" --exclude=file-roller-nautilus
+
+
+
+we need to disable selinux to use vnc work on remote desktop
+$ getenforce
+Enforcing
+$ setenforce 1		disabling selinux
+$ getenforce
+permissivie
+
+$ sed -i 's/enforcing/disabled/g' /etc/selinux/config   change selinux config from enforcing to disabled in config file
+	
+#Install VNC Server (tigervnc-server)
+Next we’ll install the VNC Server, there are lot of VNC Servers available, and for installation purposes, we’ll be installing TigerVNC Server. It is one of the most popular VNC Server and a high-performance and platform-independent VNC that allows users to interact with remote machines easily.
+Now install TigerVNC Server using the following command:
+
+$ dnf install tigervnc-server tigervnc-server-module -y
+
+# Set VNC Password for Local User
+
+Let’s assume we want ‘ajay’ user to use VNC for remote desktop session, then switch to the user and set its password using vncpasswd command,
+
+$ su - adam
+$ vncpasswd
+Password:vnc@1805
+Verify:
+Would you like to enter a view-only password (y/n)? n
+A view-only password is not use
+
+$
+[vikasnehra@linuxtechi ~]$ exit
+logout
+[root@RHEL8 ~]#
+
+
+4) Setup VNC Server Configuration File
+
+Next step is to configure VNC Server Configuration file. Create a file “/etc/systemd/system/vncserver@.service” with the following content so that tigervnc-server’s service started for above local user “vikasnehra”.
+
+# cd /usr/lib/systemd/system
+
+#  sudo cp vncserver@.service vncserver@\:2.service 	making copy of 2nd session like 
+# ls
+ vmtoolsd.service
+ vncserver@:2.service
+
+[root@RHEL8 ~]# vim /etc/systemd/system/vncserver@.service
+
+[Unit]
+Description=Remote desktop service (VNC)
+After=syslog.target network.target
+
+[Service]
+Type=forking
+WorkingDirectory=/home/adam
+User=adam
+Group=adam
+
+ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i  /dev/null 2 &1 || :'
+ExecStart=/usr/bin/vncserver -autokill %i
+ExecStop=/usr/bin/vncserver -kill %i
+
+
+#ExecStart=/usr/libexec/vncsession-start %i
+#PIDFile=/run/vncsession-%i.pid
+#SELinuxContext=system_u:system_r:vnc_session_t:s0
+
+[Install]
+WantedBy=multi-user.target
+
+
+------------------------------------------------------------------
+
+
+[Unit]
+Descriptions=Remote Desktop VNC Service
+After=syslog.target network.target
+
+
+[Service]
+Type=forking
+WorkingDirectory=/home/vikasnehra
+User=vikasnehra
+Group=vikasnehra
+
+
+ExecStartPre=/bin/sh -c '/usr/bin/vncserver -kill %i  /dev/null 2 &1 || :'
+ExecStart=/usr/bin/vncserver -autokill %i
+ExecStop=/usr/bin/vncserver -kill %i
+
+
+[Install]
+WantedBy=multi-user.target
+
+
+Save and exit the file,
+
+
+Note: Replace the user name in above file which suits to your setup.
+By default, VNC server listen on tcp port 5900+n, where n is the display number, if the display number is “1” then VNC server will listen its request on TCP port 5901.
+
+
+
+5) Start VNC Service and allow port in firewall
+I am using display number as 1, so use the following commands to start and enable vnc service on display number “1”,
+
+
+[root@RHEL8 ~]# systemctl daemon-reload
+[root@RHEL8 ~]# systemctl start  vncserver@:1.service
+[root@RHEL8 ~]# systemctl enable  vncserver@:1.service
+
+Created symlink /etc/systemd/system/multi-user.target.wants/vncserver@:1.service → /etc/systemd/system/vncserver@.service.
+
+[root@RHEL8 ~]#
+Use below netstat or ss command to verify whether VNC server start listening its request on 5901,
+
+
+# netstat -tunlp | grep 5901
+	or
+# ss -tunlp | grep 5901
+$ systemctl status firewalld
+active
+
+tcp        0      0 0.0.0.0:5901            0.0.0.0:*               LISTEN      8169/Xvnc
+tcp6       0      0 :::5901                 :::*                    LISTEN      8169/Xvnc
+
+$ systemctl status vncserver@\:2.service s
+
+
+
+[root@RHEL8 ~]# ss -tunlp | grep -i 5901
+tcp   LISTEN  0       5                    0.0.0.0:5901           0.0.0.0:*      users:(("Xvnc",pid=8169,fd=6))                    
+tcp   LISTEN  0       5                       [::]:5901              [::]:*      users:(("Xvnc",pid=8169,fd=7))                    
+
+[root@RHEL8 ~]#
+Use below systemctl command to verify the status of VNC server,
+
+[root@RHEL8 ~]# systemctl status vncserver@:1.service
+ 
+Above command’s output confirms that VNC is started successfully on port tcp port 5901. Use the following command allow VNC Server port “5901” in os firewall,
+
+#firewall-cmd --permanent --add-port=5902/tcp
+# firewall-cmd --reload
+
+
+[root@RHEL8 ~]# firewall-cmd --permanent --add-port=5901/tcp
+success
+[root@RHEL8 ~]# firewall-cmd --reload
+success
+
+[root@RHEL8 ~]#
+
+
+ 6) Connect to Remote Desktop Session
+Now we are all set to see if the remote desktop connection is working. To access the remote desktop, Start the VNC Viewer from your Windows  / Linux workstation and enter your VNC server IP Address and Port Number and then hit enter
+ 
+Next, it will ask for your VNC password. Enter the password that you have created earlier for your local user and click OK to continue
+
+$ vncviewer localhost.5002
+vnc passwd
+
+for windows vncviewer
+MobaXterm Xserver with SSH, telnet, RDP, VNC and X11
+remote ip	port
+password
+
+linux vncviewer
+$ sudo dnf makecache
+$ sudo dnf install ~/Downloads/VNC-Viewer*.rpm
+$ sestatus	selinux status disable selinux not recommeded so allow traffic on port 5902 add in firewalld
+
+[adam@ajaycentos system]$ vncserver
+	or
+$ vncserver -localhost no -geometry 800x600 -depth 24
+
+
+$ vncpasswd adam
+n
+$ vncserver -list
+
+
+anothe linux system 
+# apt install xvnc4viewer	VNC viewer package:on client machine
+
+$ xvncviewer 10.1.1.124:1
+$ vncserver -list
+$ vncserver -kill :1		1 is session listening on 1: desktop
+
+
+
+
+Now you can see the remote desktop.
+
+
+#selinux - security enhance  linux
+
+implemetntion of mandatory access control machanism in linux kernel
+part of dac discretionary access control  lik user group permissin
+
+$ htop
+
+$ ls -lZd 
+ unconfined_u:object_r:user_home_t:s0 
+ user	     : role   : type      : level
+
+AVC Access vector casche  to check rules
+
+# ls -lZ /etc/shadow
+# ls -lZ /etc/passwd 
+# yum install selinux-policy-devel
+# man selinux
+# man -k selinux 
+# man passwd_selinux	auto generated
+# man passwd_selinux(8)
+# ps -eZ | grep passwd_t	to find which process running in the selinux domain
+# ps -efZ | grep -i passwd_t
+# ls -lZ /usr/bin/passwd 
+# ps -eZ | grep -i passwd_t
+
+# cd /var/www/html/
+# touch water.txt
+# ls -Z
+httpd_sys_content_t
+
+$ man httpd_selinux
+
+$ ls -lZ water.txt
+httpd_sys_content_t:
+
+$ wget http://localhost/water.txt
+download success
+
+$ sudo chcon -t samba_share_t /var/www/html/water.txt   not persitent chnage , persitent using semange
+change lable
+
+cd /var/www/html
+$ ls -lZ water.txt
+samba_share_t
+
+cd Desktop/
+$ wget http://localhost/water.txt
+2021-11-16 06:57:18 ERROR 403: Forbidden.
+
+$ sudo tail /var/log/audit/audit.log
+
+$ sudo tail -f /var/log/audit/audit.log		for live changes
+
+# restorecon /var/www/html/water.txt 	relabeling
+$ ls -lZ water.txt
+
+$ sudo chcon -t bin_t /usr/sbin/httpd
+$ ls -Z water.txt
+samba_share_t
+
+$ wget http://localhost/water.txt
+unconfined_u	label of user
+if it misslabel of httpd then you can download file thats correact label .because of unconfined_u so you must reboot the system
+
+
+$ ps -efZ | grep httpd 
+unconfined_service_t		that is problem
+
+sol
+$ systemctl stop httpd
+$ restorecon /usr/sbin/httpd
+$ reboot
+
+
+# sudo semanage boolean -l		list of all booleans
+
+# getsebool -a 			tell bool on/off state
+# getsbool ftp_home_dir
+# getsbool httpd_can_network_connect_db		
+# semanage boolean -l | grep -i httpd	selinux boolean grep httpd releated
+
+# sudo getsebool httpd_can_network_connect_db 
+
+# sudo setsebool httpd_can_network_connect_db on
+# sudo setsebool -P httpd_can_network_connect_db on   to make persitent values
+
+
+]$ sudo vim /etc/ssh/ssh_config		add the custom port 
+#   Port 22
+    Port 12000
+$ semanage port -l | grep ssh
+22
+$ sudo semanage port -a -t ssh_port_t -p tcp 12000		inform selinux about port
+
+$ semanage port -l | grep ssh
+12000 22
+
+$ sudo firewall-cmd --add-port=33000/tcp --permanent
+
+You can now remove ssh service.
+$ sudo firewall-cmd --remove-service=ssh --permanent
+$ sudo firewall-cmd --reload
+
+$ sudo systemctl restart sshd
+
+
+$ sudo systemctl restart sshd
+$ sudo systemctl status sshd
+$ semanage port --help
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#$ sudo systemctl set-default graphical
+
+
+
+ 
+:!ls /Desktop	=>without getting out vim file run command

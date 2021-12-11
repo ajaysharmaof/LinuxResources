@@ -1,0 +1,2783 @@
+;set number			-> show line number
+cat -n demo.txt		-> -n show line nunmber also
+less demo.txt
+more demo.txt  -> go line by line but can't go up or down using arrowkey
+more -2 demo -> show first 2 line and then go line by line
+more +2 demo -> show from 2nd line and then go line by line(default it show first page)
+head demo -> it will show by default first 10 line
+head -20 demo -> it will show first 20 line
+tail demo	-> it will show by default last 10 line 
+tail -4 demo -> it will show only last 4 line
+
+display a range(4-8 lines only) number of line (sed,awk,combination of head and tail command)
+
+display line 6-12 
+$ head -12 demo | tail -7 -> head show first 12 line filter last 7 line it will show 6-12 lines only
+
+$ awk 'NR>=6 && NR<=12 {print}' demo -> line nuber(NR) greate then 6 less then equal 12 show
+
+$ sed -n '6,12p' demo -> starting line nuber 6 end 12 p-pring from demo file 
+
+#Grep
+Grep is a filter command, it is used to search a string in a given file.
+
+
+grep [options] “string/pattern” file/files
+cat file | grep [options] “string/pattern”
+echo “some text” | grep [options] “string/pattern”
+
+grep "yeah" demo	-> show which line has yeah text 
+grep "bash" one.sh two.sh -> search in two files
+grep "bash" * ->search in currentdirectory all files not in subdirectory
+echo "this is text" | grep "text"  -> search in text also
+
+cat demo | grep "yoo"
+
+Basic options: -i -w -v -o -n -c -A -B -C -r -l -h
+Advanced Options: -e -f and –E
+
+Basic options: -i -w -v -o -n -c -A -B -C -r -l -h
+ 
+ grep “string/pattern” file/files
+ grep [options] “string/pattern” file/files
+ 
+ -i To ignore case for matching/searching
+ -w To match a whole word
+ -v To display the lines which are not having given string or text
+ -o To print/display only matched parts from matched lines
+ -n To display the matched line numbers
+ -c To display matched number of lines
+ -A To display N lines after match (grep –A 3 “string” file)
+ -B To display N lines before match
+ -C To display N lines around match
+ -r To search under current directory and its sub-directory
+ -l To display only file names
+ -h To hide file names
+ 
+  grep -i "yoo" demo 
+ grep -w "yoo" demo 
+ grep -w "3yoo" demo 
+ grep -v "3yoo" demo 
+ grep -o "3yoo" demo 
+ grep -n "3yoo" demo 
+ grep -no "3yoo" demo 
+  grep -c "3yoo" demo 
+  grep -A 1 "3yoo" demo 
+  grep -B 1 "3yoo" demo 
+  grep -C 1 "3yoo" demo 
+  grep -r "3yoo" demo 
+  grep -l "3yoo" demo 
+  grep -h "3yoo" demo 
+
+echo "this is text" | grep -i "This"
+httpd -v | grep "version"
+
+
+Advanced Options: -f -e and –E
+
+ -f Takes search string/pattern from a file, one per line
+ -e To search multiple strings/patterns
+ Pattern is a string and it represents more than one string.
+ 
+ -E To work with patterns
+
+ grep -E[options] “pattern” file/files
+
+
+vim search_keyword   -> add words in this file. you want to search in other files
+
+grep -f search_keyword demo  -> demo is file in which we are searching
+
+vim multiple_search_keywords ->  hii
+								 this
+								 3yoo
+								 
+grep -f multiple_search_keywords demo  -> it search multiple keywords
+
+grep -e "this" -e "hii" -e "3yoo" demo  -> seaching multiple keywords from command line
+
+grep -E "this|hii|yoo|3yoo" demo  -> multiple search word together throuh pipe search all words( it call pattern inside "|")
+
+#Rules to create patterns:
+
+grep -E[options] “pattern” file/files
+
+xy|pq Matches for xy or pq
+^xyz Matches for the lines which are starting with “xyz”
+xyz$ Matches for the lines which are ending with “xyz”
+^$
+Matches for the lines which are empty
+\
+To remove the special purpose of any symbol. Ex: \^ \$
+.
+Matches any one character
+\.
+Matches exactly with .
+\b
+Match the empty string at the edge of word
+?
+The preceding character is optional and will be matched, at most, once.
+*
+The preceding character will be matched zero or more times
++
+The preceding character will be matched one or more times
+[xyz] Matches for the lines which are having x or y or z
+[a-d] is equal to [abcd] Matched for the lines which are having a/b/c/d
+[a-ds-z] is eqal to [abcdstuvwxyz]
+^[abc] Matches for the lines which are starting with a/b/c
+[^abc] Matches for the lines which are not starting with a/b/c
+{N}
+The preceding string matched exactly N times
+{N,}
+The preceding string matched N or more times
+{N,M} The preceding string matched at least N times or M times
+
+grep -E "^3yoo" demo -> get line starts from 3yoo
+grep -E "bye$" demo  -> at the end of line have bye word
+
+grep -E "^$" demo -> grep empty lines
+
+grep -E "\^" demo -> \ to ignore spiecal character as string seach
+
+grep -E "." demo  -> matches any character
+grep -E "t..s" demo -> match any character that between t and h. start of t and end of h.
+grep -E "\." demo  -> to match dot symbol 
+
+grep -E "line\b" demo  -> math string that have end of spaces not part of any words(not lines)
+
+grep -E "\bline" demo -> match string that have starting of space " lines" or " line"
+
+grep -E "\bline\b" demo -> spaces before and after of word like " line "
+
+				or 
+				it also give same result w->exact word match
+grep -Ew "line" demo ->match exact word 
+
+grep -E "yf?" demo -> at least match 1st character "y" results also show.f which is precding character is option it requires to match f also
+
+grep -E "yf*" demo -> precding character "f" match zero or more times like yffff, yf , y, 
+
+grep -E "yf+" demo -> precding character "f" match one or more times like yffff, yf, atleash one time "f" after "y"
+
+grep -E "y|o|h" demo ->simila
+		or
+grep -E "[yoh]" demo -> Matches for the lines which are having atleast one of theem x or y or z
+
+grep -E "[abcdef]" demo -> search characters a,b,c,d,e
+					or
+grep -E "[a-f]" demo -> character range b/w a to f
+
+grep -E "[a-ds-z]" demo ->[a-ds-z] is equal to [abcdstuvwxyz] a to d als s to z
+
+grep -E "^[abc]" demo -> print the line that starting from either a or b or c only
+
+grep -E "[^yc]" demo -> grep is look for all character not for y and c character
+
+grep -E "yooooo" demo
+		or 
+grep -E "yo{5}" demo -> yooooo  y f five times  { N} time match
+
+
+
+grep -E "yo{2,4}" demo -> match yoo or yoooo 2 time or 4 times
+
+grep -E "yo{2,4}\b" demo -> match yoo or yoooo 2 time or 4 times and /b space at the end "yoo " or "yoooo "
+
+grep -E "yo{2,}" demo  -> The preceding string matched N or more times
+
+grep -E "[[:digit:]]" demo  
+
+grep -E "[[:upper:]]" demo  
+
+grep -E "[[:lower:]]" demo 
+
+grep -E "[[:alpha:]]" demo  
+
+grep -E "[[:blank:]]" demo  
+
+grep -E "[[:space:]]" demo  
+
+
+Q. Write a pattern that only matches directories?
+ls -lrt | grep -E "^d"
+
+Q. Write a pattern that only matches files?
+ls -lrt | grep -E "^-"
+
+Q. Find the server ip4 info from a file ?
+cat demo | grep -E "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+\b start from space or blank to avoid 4 digits
+[0-9]{1,3} 0-9 number maximum conscutive 1 to 3 number not 4
+
+#cut
+The 'cut‘ command is a powerful tool to extract parts of each line from a file.
+
+It is based on
+	 Byte Position
+	 Character Position
+	 Fields based on delimiter (by default delimiter is the tab)
+	
+	
+Cut command syntax:
+
+ cut [options] <positions(fields) /range of positions(fields)> <input_file>
+ cat file | cut [options] <positions(fields) /range of positions(fields)>
+ Options: -b -c and -f
+ Rages:
+		2 only second byte/character/filed
+		2- second byte/character/filed to last
+		-7 first to seven
+		3,5 third and fifth
+
+#Cut command for Byte/Character Position:
+
+To cut out a section of a line by specifying a byte/character position use the -b/-c option.
+
+Syntax:
+  cut -b <position’s/range of position’s> file
+  cut -c <position’s/range of position’s> file
+  Position’s: 3,5,10
+  Range of Position’s: 3-7, 6-10
+
+Ex: mytext.txt
+ cut -b 2 mytext.txt
+ cut -b 3,7 mytext.txt
+ cut -b 5-9 mytext.txt
+ cut -b 5- mytext.txt
+ cut -b -7, 9 mytext.txt
+ Use --complement to complement the output
+
+#Cut command for filed Position:
+
+ To cut out a section of a line by specifying a field position use the -f option.
+
+ Assume fields are like columns, by default cut command will separates columns based on tab(delimiter).
+
+ If we want to use different filed separator use -d (delimiter).
+
+ Syntax:
+
+	 cut -f <position’s/range of position’s> file
+	 cut -f <position’s/range of position’ss> [-d ‘:’] [--output-delimiter=‘**’] file
+	 -d is a delimiter like @ , : / etc....
+
+	 Position’s: 3,5,2
+	 Range of Position’s: 3-7, 6-10
+
+ Ex: mytext.txt
+ cut -f 2 mytext.txt
+
+Use -s option with –f to Ignore the line that do not contain a delimiter
+ cut -f 3,7 mytext.txt
+ cut -f 5-9 mytext.txt
+ cut -f 5- mytext.txt
+ cut -f -7, 9 --output-delimiter=“ “ mytext.txt
+
+cut -c 1 /etc/passwd  -> get 1st character of each and every line of file
+
+cut -b 1 /etc/passwd ->get 1st byte of each and every line of file
+
+cut -c 2,3 /etc/passwd -> get 2 and 3 character of each line of file
+
+cut -c 1-6 /etc/passwd ->get 1 to 6 range character of each line of file
+
+cut -c 1-6,9 /etc/passwd ->get 1 to 6 range character and 9 character also of each line of file
+
+cut -c 1-10 /etc/passwd ->get 1 to 10 range character of each line of file
+					or  same
+cut -c 1-10 /etc/passwd ->get 1 to 10 range character of each line of file
+					
+cut -c 6- /etc/passwd ->get 6 character to last character of each line of file
+
+
+#fields based - tabs based separated (-f) otherwise it consider 1 filed complete line
+
+cut -f 2 demo1 -> get 2 nd field of every line in file (file must be field saparated with tab command)
+
+cut -f 1,3 demo1
+cut -f 1-2 demo1 -> 1 to 2
+cut -f 1-2,3 demo1 -> 1to 2 and 3 also
+cut -f 1- demo1  -> 1 to 3
+cut -f -3 demo1	-> 1 to 3
+cut -f -2 demo1 ->1st to 2 
+
+
+custome field seperater: : " " ,
+
+cut -d  ":" -f /etc/passwd
+cut -d ":" -f 1,3 /etc/passwd  -> 1 and 3 field seprated by :
+
+cut -d ":" -f 1,4 /etc/passwd --output-delimiter=" "  -> seperate output with space (not delimeter :)
+
+cut -d ":" -f -4 /etc/passwd --output-delimiter="|" -> 1st to 4th field separter is |
+
+cut -f 1 demo1  -> space seprate field also getting to ignore them use -s
+cut -d ' ' -f 1 demo1-> seperate field with " " 
+cut -d ' ' -sf 1 demo1 -> -s leave that field that not have field seprater ' '
+
+cut -s -f 1 demo1  -> to igone the field that not have tab field seprateer
+
+cat demo1 | cut -f 1
+
+httpd -v
+httpd -v | cut -d "/" -f 2 -> it also getting 2nd line
+httpd -v | grep -E "version"
+httpd -v | grep -E "version" | cut -d "/" -f -> grep version line seprated by / 
+httpd -v | grep -E "version" | cut -d "/" -f | cut -d " " -f 1 -> remove paratheis () from version nuber
+
+httpd_version = $(httpd -v | grep -E "version" | cut -d "/" -f | cut -d " " -f 1)
+
+echo "$httpd_version"
+
+cut --complement -f 1 demo1  -> output except 1 field we get 2 and 3 field
+
+httpd -v | grep -E "version" | cut -d "/" -f 2 | cut -d ' ' -f 1 -> seprate field / assum 
+
+httpd -v | awk ' /version/ { print }' -> pattern /version/ b/w / /
+httpd -v | awk -F '[ /]' ' /version/ { print $4}' -> -F field seprater are " " or "/" both consider as field seprater and print 4 th fiedl $4
+ 
+httpd -v | awk -F '[ /]' ' NR==1 { print $4}' ->field seprater as a condition NR number of records 1  or line number is 1 get 4th field seprated by " " "/" 
+
+
+
+
+
+
+
+
+
+#awk
+The awk command is a powerful method for processing or analyzing text or data files ,which are organized by lines (rows or records) and columns(fileds).
+
+ we can use awk as a linux command and also as a scripting language like bash shell scripting.
+
+ Simple awk command syntax:
+
+ awk [options] ‘[selection _criteria] {action }' input-file
+ cat input-file | awk [options] ‘[selection _criteria] {action }' input-file
+
+ Awk can take the following options:
+		-F fs To specify a field separator. (Default separator is tab and space)
+		-f file To specify a file that contains awk script.
+		-v var=value To declare a variable.
+
+ Selection criteria: pattern/condition
+
+ Action: It is a logic to perform action on each row (with print like $4)
+
+$ > demo3 -> create demo3 file or overwrite as empty on existing file
+
+
+
+awk '{print $1}' demo3 -> awk consider tab and space as field seprater
+httpd -v | awk '{print $1} -> field seprater is default take space
+httpd -v | awk '{print $6}
+
+
+
+#Simple awk command syntax:
+
+	awk ' {action }' input-file
+    Action: Action is a logic to perform action on each record.
+
+	Example: print $1 print first filed from each line
+
+
+	Some of the default variables for awk:
+		$0 - Entire file
+ 		$1 - First field from each line/record
+	    $2 - Second field from each line/record
+		NR - It will print line or record number
+		NF - It will print number of filed fr
+
+awk '{ print $0 }' demo3 -> print all row default is $0
+		or same
+awk '{ print }' demo3 
+awk '{ print $1 }' demo3 
+awk '{ print $1,$3 }' demo3 -> first and 3rd field. default field seprater is space.
+
+OFS = OUTPUT FIELD SEPRATER -to get custom field seprater
+awk 'BEGIN {OFS="_"} { print $0 }' demo3 
+
+awk '{ print $3,$1 }' demo3 -> reverse field 
+awk '{ print NR }' demo3 
+
+awk '{ print NR }' demo3 -> print NR-number of record or line nuber
+awk '{ print NR,$0 }' demo3 -> print line nuber of entrie file $0
+
+awk '{ print NR,$0,NF }' demo3 -> print NF also - Number of Fields in a line
+awk '{ print NR,$NF}' demo3  ->get last field of each line -> print line number with last field of each line 
+
+awk '{print $NR }' demo3  -> print record according to line number like 2nd line 2nd record, 1st line 1st record or field
+
+
+
+
+#tr command:
+tr: short for translate
+
+ tr is useful to translate or delete given set of characters from the input.
+
+ Syntax:
+ tr [options] [SET1] [SET2] <inputFile
+ Some Command | tr [options] [SET1] [SET2]
+
+ No Option: For translation
+
+
+ Examples for SET1/SET2: [:lower:], [a-z], [:upper:] [A-Z] , [:digit:] , [0-9], [:space:]
+
+ -d : deletes given set of characters.
+
+
+tr "[:lower:]" "[:upper:]" <demo  -> < is standard input. convert lower case to upper case.
+
+tr "o" "E" <demo -> replace o with E in file
+
+cat demo | tr " " "_" <demo -> replace space with underscore
+
+docker -v
+docker -v | cut -d " " -f 3
+docker -v | cut -d " " -f 3 | tr -d "," -> delete comma(,) from output
+
+
+
+#tee command:
+tee command is used to display the output and also to store that output into a file. (It does both the tasks simultaneously).
+
+ It is useful to create logs for shell scripting.
+
+ Syntax:
+ Command | tee outputFile.txt
+ Command | tee –a outputFile.txt
+
+ls -lrt > demono
+ls -lrt | tee demono -> it will show on output screen and also stored in file same time
+
+ls -lrt | tee demono
+date | tee -a demono -> to append in file so don't overwrite on file
+uptime | tee -a demono 
+
+
+
+#echo command usage:
+
+ echo command is used to display a string/message or variable value or command
+result.
+
+ Simple echo command syntax to display a message:
+ echo string/message
+ echo ‘string/message’
+ echo “string/messgae”
+
+s="ajay"
+echo "hii admin $s"
+
+
+#Introduction to Variables
+
+ Variables are useful to store data in shell scripts and Later we can use them if they required.
+
+ Simple Variable: x=4
+ Default value of a variable is Empty/Nothing
+
+ In Linux Shell Scripting, there are two types of variables:
+
+ System Variables:
+	 Created and maintained by Operating System itself.
+	 This type of variables are defined in CAPITAL LETTERS.
+	 We can see them by using set command
+	 Example: HOME, USER...
+
+ User Defined Variables:
+	 Created and maintained by the user.
+	 This type of variables are defined in lower letters.
+	 But we can also take combination of upper and lower case letters.
+
+
+Rules to Define User Defined:
+
+Variable Name should contain only a-z or A-Z, 0-9 and _ characters.
+
+Variable Name length should be less than or equal to 20 characters.
+
+Variable Names are case sensitive. Means x and X are different.
+
+Don’t Provide space on either sides of equal symbol while defining variables
+	 Ex: x=4 is valid
+	 x =4 or x = 4 or x= 4 are invalid
+
+No need to declare variable type, Automatically it will take care while executing commands or scripts.
+
+Use quotes for the data if data consist of spaces
+
+We can store the output of a command into a variable as follows:
+	 anyVariable=$(command)
+	 anyVariable=`command`
+
+We can assign one variable value/data into another using:
+	 Name=“Shell Scripting”
+	 NewName=$Name
+	 NewName=${Name}
+
+s="welcome to bye"
+
+echo "$s ajay" 
+echo "$s"
+echo $s
+echo '$s'  -> not worked(treate as string)
+echo $USER
+echo $BASH
+
+set -> different system varibles defines
+set | grep "BASH"/HOME/USER
+
+
+date_var=$(date)
+date_var=`date`
+
+echo $date_var
+
+y=$x
+or same
+y=${x}
+echo $y
+
+systemctl status docker | grep "Active"
+systemctl status docker | awk '/Active/ { print $3 }'
+systemctl status docker | awk '/Active/ { print $3 }' | tr -d "("
+systemctl status docker | awk '/Active/ { print $3 }' | tr -d "(" | tr -d ")"
+	OR also same
+systemctl status docker | awk '/Active/ { print $3 }' | tr -d "(,)"
+	or also same
+systemctl status docker | awk '/Active/ { print $3 }' | tr -d "[()]"
+
+docker -v | awk '/version/ { print $3 }' | tr -d ","
+
+
+#Advanced Usage of echo command:
+
+echo command is used to display string/message or variable value or command result.
+
+ Simple syntax:
+
+	 echo message/string
+	 echo “message/string”
+	 echo “message/string with some variable $xyz”
+	 echo “message/string/$variable/$(command)”
+	
+ Advanced usage (to execute escape characters):
+	 echo -e “Message/String or variable”
+	 Escape Characters:
+		 \n New Line
+		 \t Horizantal Tab
+		 \v Vertical Tab
+		 \b Backspace
+		 \r Carriage Return etc...
+
+	 To display message in colors.
+	 echo -n “message/string/$variable/$(command)”
+
+
+echo "$(whoami)"
+echo "the current user is: $(whoami)"
+echo -e "first line \nsecond line"
+echo -e "\033[0;36mmy fav color \033[0m"
+
+echo -n advance_Echo.sh  -> it won't send cursor two next line and two lines show in one line
+
+
+#Multiline Block:
+
+ Heredoc is very useful to write multi-lines or multiline block.
+command << DELIMITER
+Line1
+Line2
+Line3
+DELIMITER
+
+ Note: Here DELIMITER can be any string
+
+ Heredoc is mostly used with the combination of cat command.
+
+ Display multi-lines using cat command.
+
+
+
+We can also redirect this heredoc result into a file or as a input for another command.
+
+cat << DELIMITER > demo.txt
+Line1
+line1
+DELIMITER
+
+cat << EOF
+HOME: $HOME
+USER: $USER
+EOF
+
+cat << EOF > demo.txt
+HOME: $HOME
+USER: $USER
+EOF
+
+cat << EOF | grep "USER" 
+HOME: $HOME
+USER: $USER
+EOF
+
+
+#Here String:
+
+ Here String is like here document only but with one line.
+
+ Syntax:
+command <<<sting
+
+echo "caps this line" | tr [a-z] [A-Z]
+	or same
+tr [a-z] [A-Z] <<<"caps this line"
+
+name="turn big caps"
+echo "$name" | tr [a-z] [A-Z]
+	or same
+tr [a-z] [A-Z] <<<$name
+tr [a-z] [A-Z] <<<$(docker -v)
+
+
+#Comments for Bash Shell Scripting:
+
+ A comment is a human-readable explanation that is written in the shell script.
+
+ Why we need comments:
+ Adding comments to your Bash scripts will save you a lot of time and effort when you look at your code in the future.
+
+ Comments are used to explain the code.
+
+ The comments also help other developers and system administrators who may need to maintain the script to understand your code and its purpose.
+
+ Here, we have two types of comments. They are:
+ Single line Comments
+ Multi-line Comments
+ Note: Comments wont execute while running or executing your script.
+
+<< my_COMment
+line
+line
+line
+my_COMment
+
+: '
+line
+line
+line
+'
+
+/etc/shells -> redhat
+/usr/bin/bash
+#!/usr/bin/bash
+
+#Make Bash Shell Scripts as Portable with Unix/Linux Systems
+
+ What is a Shebang line ?
+ Shebang line means: which shell we are using to execute our shell scripts.
+
+ Suppose in our case it is bash shell and we are using shebang as #!/bin/bash
+
+ So, we can make our bash shell scripts as portable using:
+#!/usr/bin/env bash
+
+$which env -> ubuntu /usr/bin/env
+$which env -> rhel /usr/bin/env
+
+#!/usr/bin/env bash  -> common on both system bash portable
+
+
+#Debugging Bash Shell Scripts:
+
+ Debugging is determining the cause which fails the script.
+
+ Why script fails ?
+	 Because of some errors.
+
+ This is because of two type of errors.
+	 Syntax Errors
+	 Runtime Errors
+
+ Syntax Errors stops script execution and run time errors don’t stop script.
+
+ Actually we don’t have good debugging procedures with shell scripting, but we can try with some commands.
+
+ And there are different commands for debugging and we will work with set command.
+
+ One more thing our bash is an interpreter.
+
+
+#Debugging Bash Scripts...
+
+ We can go with set command and We have different options with set command.
+
+ Syntax:
+ set [options]
+
+ No Options: To list system defined variables  $ set
+
+ set -n No Execution, Purely for syntax check.
+
+ set -x Prints the command before executing it in script
+	
+ set -e Exit Script if any command fails
+set  -v  verbose for detail message
+
+inside bash script use to debug:
+#!/bin/bash
+set -v
+set -n
+set -x
+set -e   -> it won't execute if any command fails
+or
+#!/bin/bash -x/-v/-n/-e
+or 
+bash -x debug_script
+
+
+
+#The exit status of a command:
+
+Each Linux command returns a status(int number) when it is executed.
+
+We can display the exist status of a command with echo $?
+	x=$? (storing exit status of a command into a variable)
+
+0 exit status means the command was successful without any errors.
+
+A non-zero (1-255 values) exit status means command was failure.
+
+Example:
+	127 - Command not found
+		1 - Command failed during execution
+		2 - Incorrect command usage etc ...
+Command exit status is very useful in Scripts.
+
+kaflf
+echo $?  -> 127 failed
+ls
+exit_status=$?
+echo $exit_status ->
+
+cat demo.txt | grep "foly"
+echo $? ->1  grep command result foly not in demo.txt failed status
+
+cat /etc/securetty ->echo $?->1 command failed command is correct but failed during execution
+
+ls -xyz ->echo $? ->2 - Incorrect command usage
+
+
+
+
+#Basic Operations on Strings:
+
+ Defining a string variable
+	 x=shell / y=“Shell scripting” / cmdOut=$(date)
+
+ Displaying the string variable value
+	 echo $x / echo ${x}
+
+ Finding the length of a string
+	 xLength=${#x}
+
+ Concatenation of strings
+	 xyResult=$x$y
+
+ Convert Strings into lower/upper case
+	 xU=${x^^}, yL=${y,,}
+
+ Replacing the part of the string using variable
+	 newY=${y/Shell/Bash Shell} or we can also use sed command
+
+ Slicing the string/sub-string
+	 ${variable_name:start_position:length}
+
+
+
+x="shell script"
+x=$(date)
+$ echo $x
+
+$ echo $x
+$ echo "$x"
+$ echo "${x}"
+
+echo "${#x}" -> 28 give lenth of sting
+
+$ rootPath="/etc"
+$ filePath="/os-release"
+$ complet_path=$rootPath$filePath   -> concatination of string
+	or also
+$ complet_path=${rootPath}${filePath}
+
+$ echo $complet_path 
+
+echo ${x^^} -> convert in upper case (echo "${x^^}")
+		or also
+echo "$x" | tr [a-z] [A-Z]
+new_caps=$(echo "$x" | tr [a-z] [A-Z])
+
+echo "${y,,}" -> convert lower case
+
+$ echo "${x/Shell/Bash shell scripting}" -> replace Shell with ->Bash shell scripting
+
+$ echo "$x" | sed 's/Shell/bash Shell scripting/' -> sed s substitude shell with
+bash Shell scripting
+
+
+$ x="shell scripting"
+$ echo "${x:2:3}"
+ell
+$ echo "${x:2}" -> 2nd character to last character
+ell scripting
+
+
+
+#String Operations on Paths:
+(cmds: realpath, basename and dirname)
+
+ realpath :Converts each filename argument to an absolute pathname but it do not validate the path.
+
+ basename:
+			Strips directory information
+			Strips suffixes from file names
+
+ dirname :
+It will delete any suffix beginning with the last slash character and return the result
+
+
+$ realpath demo
+/home/ajay/Desktop/demodir/demo
+
+$ realpath xukdjf  -> it not validate path if it not there it combined pwd path
+/home/ajay/Desktop/demodir/xukdjf    -> file not there not validate
+
+
+$ basename /home/ajay/Desktop/demodir/heredocs.sh  -> get file name only
+heredocs.sh
+$ basename /home/ajay/Desktop/demodir/heredocs.sh .sh -> remove .sh suffix
+heredocs
+
+$ path_s=/home/ajay/Desktop/demodir/tor.tar.gz
+$ basename $path_s 
+tor.tar.gz
+$ basename $path_s  .tar.gz
+tor
+
+$ dirname /home/ajay/Desktop/demodir/heredocs.sh  -> give dir path before last /
+/home/ajay/Desktop/demodir
+
+$ dirname /home/ajay/Desktop/demodir
+/home/ajay/Desktop
+
+
+#!/bin/bash
+<< mycomment
+read -p "Enter your small letter string: "  my_name
+name_upper=${my_name^^}
+echo "name in upper case $name_upper"
+mycomment
+
+read -p "Enter your name:"
+echo "$REPLY"			->default var name if we don't give var name
+
+
+#command line arguments or Positional arguments:
+command line argumnts are the arguments/values specified at the command prompt while running commands/shell scripts
+
+#!/bin/bash
+<< mycomment
+echo "$0"   #display name of file
+echo "$1"	#display 1 argument
+echo "$2"
+echo "$3"
+echo "${10}"	#->display 10th argument
+mycomment
+echo "total passed argument count in shell script: $#"
+
+echo "display all command line argument: $*"
+#	or same both
+echo "display all command line argument: $@"
+
+#./cmd_arg.sh
+#./cmd_arg.sh 12 23 32 23 "shell script" fds r32 f
+
+
+#Arithmetic Operators:
+script var treated as string
+
+3way to perform arithmatic operation
+->using declare
+->using expr
+->using let
+
+->using (())   -> for integers
+->using bc   ->(bash calculator) for interger and floats numbers
+
+x=7
+y=7
+((sum=x+y))
+((sum=x+10))
+echo "$sum"
+echo "$sum((4+3))"
+((x++))
+
+
+$ x=4.5
+$ y=3.2
+
+$ bc <<<"$x+$y"
+
+$ x=5
+$ y=999
+$ bc<<<"scale=2;$y/$x"  -> scale to get 2 digit after .
+199.80
+
+#!/bin/bash
+x=5
+y=89
+((sum=x+y))
+echo "sum of $x and $y :$sum"
+
+result=$(bc<<< "scale=2;$y/$x")
+echo "division o $y and $x : $result"
+
+
+#!/bin/bash
+read -p "Enter your first number: " a
+read -p "Enter your second number: " b
+#((sum=a+b))
+sum=$(bc<<<"scale=2;$a+$b")
+echo "addition of $a and $b: $sum"
+
+
+
+#case statement
+
+case $num in
+   opt1)
+	   statment
+	   ;;
+    opt2)
+	    statements
+	    ;; 
+    *)
+	    statments
+	    ;;
+esac
+
+
+
+#!/usr/bin/bash
+clear
+read -p "Enter num-1: "  a
+read -p "Enter num-2: "  b
+echo "========================="
+echo "Enter 1. Addition"
+echo "      2. Sub"
+echo "      3. Mul"
+echo "      4. Div"
+echo "========================="
+read -p "Enter your option(1-4): " opt
+
+case $opt in
+	1)
+		echo "you selected addition"
+		echo "the addition of $a and $b is: $((a+b))"
+		;;
+	2)
+		echo "you selected substration"
+		echo "the subtration of $a and $b is: $((a-b))"
+		;;
+	3)
+		echo "you selected multiplication"
+		echo "multiplication of $a and $b is: $((a*b))"
+		;;
+	4)
+		echo "you selected division"
+		echo "division of $a with $b is: $((a/b))"
+		;;
+	*)
+		echo "you selected invalid option"
+		;;
+esac
+
+
+#!/usr/bin/bash
+clear
+read -p "Enter your file extention: " ext
+case $ext in
+	".txt")
+		ls -lrt *.txt
+		;;
+	".sh")
+		ls -lrt *.sh
+		;;
+	*)
+		echo "Sorry!. You entered invalid file extention"
+		;;
+esac
+
+
+#test command:
+->it is a command to judge condions
+syntax:
+->test condition or[ condition ] or[[ condition]]
+Note:[[]] works with bash/ksh/zsh
+
+condition to work with test command
+-> comparison operators
+-> File Test operators
+
+#-> Comparison Operators with test command:
+
+Numbers:
+
+[[ int1 -eq int2 ]] -- It return true if they are equal else false
+[[ int1 -ne int2 ]] -- It return false if they are not equal else true
+[[ int1 -lt int2 ]] -- It return true if int1 is less than int2 else false
+[[ int1 –le int2 ]]  -- It return true if int1 is less than or equal to int2 else false
+[[ int1 -gt int2 ]] -- It return true if int1 is greater than int2 else false
+[[ int1 -ge int2 ]] -- It return true if int1 is greater than or equal to int2 else false
+[[ ! int1 -eq int2 ]] -- It reverse the result
+
+$ test 4 -eq 4
+$ echo $?
+0		-> test succes true
+
+$ [ 4 -eq 43 ]
+$ echo $?
+1
+$ [[ 4 -eq 43 ]]
+$ echo $?
+1
+
+$ x=6
+$ y=2
+$ [[ $x -gt $y ]]
+$ echo $?
+0
+
+
+$ [[ ! $x -gt $y ]]  ->make result reverse
+$ echo $?
+1
+
+
+Strings:
+
+
+
+
+both the strings are equal else false
+
+[[ -z str ]] -- It return true if the length of the str is zero else false
+[[ -n str ]] -- It return true if the length of the str is no-zero else false
+[[ str1 == str2 ]] -- It return true if both the strings are equal else false
+[[ str1 != str2 ]] -- It return true if both the strings are equal else false
+
+$ my_name=""
+$ [[ -z $my_name ]]			->return true if sting is empty
+$ echo $?
+0
+
+$ my_name="shell script"	->retun 1 sting not empty false
+$ [[ -z $my_name ]]
+$ echo $?
+1
+
+File test operators:
+--------------------
+
+[  -d  file ]	-- It return true if the file/path  is directory  else false     
+[  -f file ]    -- It return true if the file/path is a file else  false
+[  -e file ]    -- It return true if the file/path is exists else  false
+[  -r file ]    -- It return true if the file/path is readable else  false
+[  -w file ]    -- It return true if the file/path is writable else  false
+[  -x file ]    -- It return true if the file/path is executable else  false
+
+
+$ [[ -d dir ]]		-> retun true(0) if it is directory 
+$ echo $?
+0
+
+$ [[ -f dir ]]  -> return true(1) if it is file
+$ echo $?
+1
+
+-----------------------------------------------------------------------------
+Advanced file test operators are listed below:
+
+    a : True if the file exists.
+    b : True if the file exists and is a block special file.
+    c : True if the file exists and is a character special file.
+    d : True if the file exists and is a directory.
+    e : True if the file exists.
+    f : True if the file exists and is a regular file.
+    g : True if the file exists and its SGID bit is set.
+    h : True if the file exists and is a symbolic link.
+    k : True if the file exists and its sticky bit is set.
+    p : True if the file exists and is a named pipe (FIFO).
+    r : True if the file exists and is readable.
+    s : True if the file exists and has a size greater than zero.
+    t : True if file descriptor is open and refers to a terminal.
+    u : True if the file exists and its SUID (set user ID) bit is set.
+    w : True if the file exists and is writable.
+    x : True if the file exists and is executable.
+    O : True if the file exists and is owned by the effective user ID.
+    G : True if the file exists and is owned by the effective group ID.
+    L : True if the file exists and is a symbolic link.
+    N : True if the file exists and has been modified since it was last read.
+    S : True if the file exists and is a socket.
+==============================================================================
+
+
+
+
+#Command Chaining Operators:
+Command Chaining Operatore are userfule to Combining several commands so than we can write simp and short shell scripts.
+
+Combining two or more commands is called command chaining.
+
+ There are different Operators to combine commands on command line and in shell scripting.
+
+	 Semi-colon Operator	;
+	 Logical AND Operator	&&
+	 Command Combination Operator	{}
+	 Logical OR Operator	||
+	 Precedence Operator	()
+	 Logical AND – OR Operators	&& ||
+
+
+ Note: Behavior of operators
+
+cmd1 ; cmd2		– Run cmd1 and then cmd2, regardless of the success or failure of cmd1
+
+cmd1 && cmd2	– Run cmd2 only if cmd1 succeeded
+cmd1 && { cmd2; cmd3 ; }	– Run cmd2 and cmd3 only if cmd1 is success
+cmd1 || cmd2	– Run cmd2 only if cmd1 failed
+cm1 && cmd2 || cmd3		– Run cmd2 if cm1 is success else run cmd3
+
+$ ls;pwd;date
+which docker
+
+$ which apache2;ls
+
+$ which docker && docker -v -> run second commadn if first commadn success
+
+$ which docker 2>&1 1>/dev/null && docker -v -> don's show 1st command result on output screen
+
+$ which apache2 && apache2 -v -> run apache -v if apache2 install if 1st commadn success
+
+$ which apache2 2>&1 1>/dev/null && ^Cache2 -v -> to avoid output of 1st command show on screen
+
+$ ls && pwd && date
+
+
+$ which apache2
+$ which apache2 || echo "apache2 is not installed"  ->– Run cmd2 only if cmd1 failed
+apache2 is not installed
+
+$ which docker && echo "docker is installed" || echo "docker is not imstalled" -> – Run cmd2 if cm1 is success else run cmd3
+docker is not imstalled
+
+#check if docker is installed or not
+#!/bin/bash
+which docker 2>&1 1>/dev/null
+if [[ $? -eq 0 ]]
+then
+	echo "Docker is installed on this host $(hostname -s)"
+else
+	echo "Docker is not installed on this host $(hostname -s)"
+fi
+
+$ ls && { date;pwd; } -> 	– Run cmd2 and cmd3 only if cmd1 is success
+
+
+
+# Executing Block of code using { }:
+
+#!/bin/bash
+
+
+
+ls
+pwd
+date
+
+
+	OR SAME
+#!/bin/bash
+
+
+{
+ls
+pwd
+date
+}
+
+OR SAME
+#!/bin/bash
+
+{ ls;pwd;date; }
+
+
+#!/bin/bash
+
+
+#{ ls;pwd;date; }
+#which docker && { echo "Docker is installed on this host" ; echo "The docker version is: $(docker -v)"; }
+
+#2>&1 - redirecting standard erros on standard output
+#1>/dev/null -redirecting standard output to nullify
+
+which apache2 2>&1 1>/dev/null && { echo "Apache is installed" ; echo "apache version info is: $(apache2 -v)" ; } || echo "apache is not installed"
+
+
+
+#Simple if Conditional Stement
+
+ Syntax:
+
+ Cmd1 && Cmd2
+		if Cmd1
+		then
+			Cmd2
+		fi
+
+ Cmd1 && { Cmd2 ; Cmd3 ; }
+
+		if Cmd1
+		then
+			Cmd2
+			Cmd3
+		fi
+
+
+#Simple if-else Stement
+
+ Syntax:
+	 Cmd1 && Cmd2 || Cmd3
+
+		if Cmd1
+		then
+			Cmd2
+		else
+			Cmd3
+		fi
+
+ Cmd1 && { Cmd2 ; Cmd3 ; } || Cmd4
+		if Cmd1
+		then
+			Cmd2
+			Cmd3
+		else
+			Cmd4
+		fi
+
+#Simple shell scripts To verify the shell script running user is root or not
+./usr_root_verify.sh
+#User is having sudo privileges or not
+
+$whoami
+$id
+$id -u
+$id -un
+$id 
+
+sudo -v
+echo $? ->0 have root previlege
+
+sudo su -
+sudo -v
+echo $? -> 1 not have root previlege
+
+#Simple Shell Script to Start Docker service
+ 
+
+Logical Not:-
+$ [[ 3 -gt 1 ]]
+$ echo $?
+0
+$ [[ ! 3 -gt 1 ]]
+$ echo $?
+1
+
+$ [ ! 3 -gt 1 ]
+$ echo $?
+
+
+#Difference between [ and [[
+
+ [[ is the improvement version of [
+
+ [[ have several benefits compare to [
+
+ They are:
+ No need to use quotes to handle empty strings.
+ We can also use < and > operators for strings.
+
+ [[ $x = y ]] && [[ $x = yes ]] -> [[ $x = y && $x = yes ]]
+
+ There is one case where quoting will still make a difference inside a double bracket conditional
+expression and that is in regards to pattern matching.
+
+ Simple Example:
+ [[ x = “x*” ]] false
+ [[ x =~ x* ]] true
+   [[ x = x* ]] true
+   
+
+
+#Command Line Arguments
+
+ They are two ways to provide inputs for a shell script.
+	 Using read command
+	 Using Command line arguments
+	./dockerstart.sh docker status
+ 
+ 
+
+#Scheduling jobs with at and crontab:
+
+ at command is very useful for scheduling one time tasks.
+
+ Example:
+ Shutdown system at the specified time
+ Taking a one-time backup.
+ Syntax:
+	 echo “bash backup.sh" | at 9:00 AM
+		 Or
+	 Run first: at 9:00 AM then enter and give the cmd or script to run and
+press ctrl+D.
+	at 1:00
+	>bash backup.sh
+	press ctrl+d to shedule a job
+$atq 		->to list of jobs queue
+$atrm 9		->remove the job from queue
+
+ Commands used with at:
+	
+	 at : execute commands at specified time.
+	 atq : lists the pending jobs of users.
+	 atrm : delete jobs by their job number. 
+
+
+#Examples of at command:
+
+ Ex-1: Schedule task at coming 10:00 AM.
+	 at 10:00 AM
+ Ex-2: Schedule task at 10:00 AM on coming Sunday.
+	 at 10:00 AM Sun
+ Ex-3: Schedule task at 10:00 AM on coming 25’th July.
+	 at 10:00 AM July 25
+ Ex-4: Schedule task at 10:00 AM on coming 22’nd June 2025.
+	 at 10:00 AM 6/22/2015
+	 at 10:00 AM 6.22.2015
+ Ex-5: Schedule task at 10:00 AM on the same date at next month.
+	 at 10:00 AM next month
+ Ex-6: Schedule task at 10:00 AM tomorrow.
+	 at 10:00 AM tomorrow
+ 
+ Ex-7: Schedule task to execute just after 1 hour.
+	 at now + 1 hour
+ Ex-8: Schedule task to execute just after 30 minutes.
+	 at now + 30 minutes
+ Ex-9: Schedule task to execute just after 1 and 2 weeks.
+	 at now + 1 week
+	 at now + 2 weeks
+ Ex-10: Schedule task to execute just after 1 and 2 years.
+	 at now + 1 year
+	 at now + 2 years
+ Ex-1: Schedule task to execute at midnight.
+ at midnight
+ 
+ 
+ 
+#Scheduling jobs with crontab:
+
+ The crontab is used for running specific tasks on a regular interval.
+
+ Each user can schedule jobs using crontab.
+
+ Syntax:
+ minute(s) hour(s) day(s) month(s) weekday(s) command/script
+
+ Each scheduled job has six fields
+
+ Don’t change the order and six fields are separated by space
+
+ The first five are integer patterns and the sixth is the command/script to execute.
+
+minute	0-59 
+hour	0-23
+day		1-31
+month	1-12
+weekday	0-6		(sun=0 mon=1...)
+
+
+#Useful crontab commands:
+
+ Use crontab -e to schedule a job.
+
+ Use crontab -l to list the jobs (crontab -u user_name -l )
+
+ Use crontab -r to remove jobs (removes all jobs)
+
+
+#Scheduling jobs with crontab:
+
+->	30 9 15 11 6 /root/my_backup.sh
+->	30 9 15 * 6 /root/my_backup.sh
+->	30 9 15 * * /root/my_backup.sh
+->	30 9 * * * /root/my_backup.sh
+->	30 * * * * /root/my_backup.sh
+->	* * * * /root/my_backup.sh
+
+->Schedule a crontab to execute on every Sunday at 5 PM.
+	 0 17 * * 0 /root/my_backup.sh
+
+ Schedule a crontab to execute on every Sunday at 5 AM and 5 PM
+	 0 5,17 * * 0 /root/my_backup.sh
+
+ Schedule a crontab to execute on every two hours.
+	 0 */2 * * * /root/my_backup.sh
+
+
+#Scheduling jobs with crontab:
+ Yearly once:
+	 0 0 1 1 * /root/my_backup.sh
+	 @yearly /root/my_backup.sh
+->	@monthly
+->	@weekly
+->	@daily
+->	@hourly
+->	@reboot		It useful for those tasks which you want to run on your system startup.
+
+
+Question: Schedule a cron to execute at 2am daily.
+0 2 * * * /bin/sh backup.sh
+Q.Schedule a cron to execute on every minutes.
+* * * * *  /scripts/script.sh
+Q.Schedule a cron to execute on every 10 minutes.
+*/10 * * * * /scripts/monitor.sh
+Q.Schedule a cron to execute on Jan,march,dec.
+* * * 1,3,12 *  /script/script.sh
+Q.Schedule a cron to execute on first sunday of every month.
+0 2 * * sun  [[ $(date '+%d') -le 07 ]] && /script/script.sh
+Concept: command1 && command2  (command2 will execute if command1 is success)
+
+
+
+ 
+#send_automatic_mail_alert_when_ram_size_is_low.sh
+==========================================================
+
+
+#!/bin/bash
+TO="dowithscripting@gmail.com"
+TH_L=400
+free_RAM=$(free -mt | grep -E "Total" | awk '{print $4}')
+
+if [[ $free_RAM -lt $TH_L ]]
+then
+  echo -e "Server is running with low RAM Size\nAvaialbe RAM is: $free_RAM" | /bin/mail -s "RAM INFO $(date)" $TO
+fi
+==================================================================================================================
+Cronjob:
+-------
+crontab -e
+then write below and save it (for every min)
+* * * * *  /bin/bash send_automatic_mail_alert_when_ram_size_is_low.sh
+=======================================================================
+
+
+
+#Arrays:-
+
+#Concepts of Arrays
+
+What is an Array ?
+How to define array ?
+How to access Array Values ?
+Different Types of Arrays
+How to store the command output into an array ?
+How to delete and update exiting array with new values ?
+How to read array using read command ?
+
+
+#What is an Array and How to define or declare it ?
+
+ What is an array ?
+	 An Array is the data structure of the bash shell, which is used to store multiple data’s.
+	 Simple array: myarray=( ls pwd date 2 5.6 )   #No limit for length of an array
+
+ How to Define/declare an array ?
+	 There are different ways to define an array in bash shell scripting.
+		
+		 Empty Array: 		myArray=()
+		 mycmds=( ls pwd date 2 5.6 )
+		 myNewArray=( ls -lrt hostname -s )
+		 myNewArray=( “ls –lrt” “hostname –s"
+		 declare -a NewArray
+		 NewArray=( 1 3 4 5 bash scripting)
+
+
+#How to access Array values/elements ?
+
+ Basically, Bash Shell Array is the zero-based Array	(i.e., indexing start with 0)
+ Then what is an index ?
+ myarray=(23 4 6 15 5 7 )
+
+myarray
+===============================
+23  4    6		15	5		7
+==============================
+0	1	 2   	3	4		5		->Positive Index Values or Positive Indices
+-6 -5 	-4     -3	-2		-1		->Negative Index Values or Negative Indices
+
+echo “$myarray”
+echo “${myarray}”
+echo “${myarray[*]}”
+echo “${myarray[@]”
+echo “${myarray[0]”		-> Prints first value
+echo “${myarray[-1]}” 	->Prints last value
+
+
+#How to access Array values/elements ?...:=
+
+->echo “${myarray[*]:0}”	    Prints all the values starting from index-0
+
+->echo “${myarray[*]:1}”		 Prints all the values starting from index-1
+
+->echo “${myarray[*]:0:2}”		 Prints two values starting from index-o
+
+->echo “${myarray[*]:1:2}”		 Prints two values starting from index-1
+
+->echo "${!myarray[*]}"		     Prints index values of array
+
+->	echo “${#myarray[*]}”		 Find the length (number elements) of array
+
+
+
+ We can also customize index numbers:
+	 newarray[5]=“bash”
+	 newarray[9]=“shell scriting”
+	 Or
+	 newarray=([5]=“bash” [9]=“shell scripting”)
+
+Note: We can also take indices as strings and that array is called Associative Array.
+
+
+
+#Different Types of Arrays
+ We have two types of arrays in Bash Shell Scripting.
+ They are:
+	 Index Based Arrays or Arrays
+	 Associative Arrays.
+
+
+
+#How to store the command output into an array ?
+
+ Storing the output of a command into array:
+		 arraywithcmd=( $(command) )
+
+
+#How to delete and update an exiting array ?
+
+ Delete an array or even normal variable:
+	 unset variable/arrayvariable
+
+ Updating an exiting array:
+	 myarray=(1,2,3)
+	 myarray+=(4,5,6)
+
+
+#How to read an array using read command ?
+
+ Syntax:
+	 read -a myarray
+	 read –p “Enter your array” -a myarray
+
+x=(3 5 7.6 "ls -lrt")
+$ echo "${x[1]}"
+echo "${x[*/@"]}  -> print all valus
+echo "${x[@]:1}"	->show from index 1 values
+echo "${x[@]:1:2}"	->from index 1 to index 2 show values
+echo "${!x[@]}"			->show indexes
+$ echo "${#x[@]}"		->SHOW total no of values
+
+
+$ newarray[4]=bash
+$ newarray[9]=scripting
+$ echo "${newarray[@]}"
+bash scripting
+$ echo "${!newarray[@]}"
+4 9
+$ echo "${#newarray[@]}"
+2
+$ echo "${newarray[0]}"  		->noting is at index 0 only 4,9 index has values
+
+$ newarray=([5]="bash" [9]="shell script")
+
+
+$ p=([2]=two [5]=bash [8]=scripting)
+$ echo "${p[@]}"
+two bash scripting
+$ echo "${!p[@]}"
+2 5 8
+ 
+$ m=$(date)
+$ echo $m
+Fri Oct 22 10:41:49 IST 2021
+
+$ mycmdarray=( $(date) )
+$ date
+Fri Oct 22 10:44:10 IST 2021
+$ echo "${mycmdarray[@]}"
+Fri Oct 22 10:44:05 IST 2021
+
+$ echo "${#mycmdarray[@]}"
+6
+$ echo "${!mycmdarray[@]}"
+0 1 2 3 4 5
+
+$ echo $m
+Fri Oct 22 10:41:49 IST 2021
+$ unset m			->delete m variable
+$ echo $m
+	
+
+$ echo "${mycmdarray[@]}"
+Fri Oct 22 10:44:05 IST 2021
+$ unset mycmdarray
+$ echo "${mycmdarray[@]}"
+
+
+$ myarr=(1 2 3)
+$ myarr+=(4 5 6 8)				->update an array
+$ echo "${myarr[*]}"
+1 2 3 4 5 6 8
+
+
+
+$ read x
+5
+$ echo $x
+5
+$ read -a mynewarray			->read array using read command
+4 54 4 34 34
+$ echo ${mynewarray[*]}
+4 54 4 34 34
+$ echo ${mynewarray[2]}
+
+$ read -p "Enter your array" -a morearray		->->show prompt message also
+Enter your array43 43 34 34 34
+$ echo "${morearray[*]}"		
+43 43 34 34 34
+
+
+
+#Associative Arrays:
+
+ We already know about Normal arrays or Indexed Arrays or Index Based Arrays and for these arrays Index values or Indices are Numbers (Integer Number)
+
+ Associative arrays are the arrays with index values as strings.
+
+ Generally no need to declare normal arrays before using them but we have to declare Associative arraysbefore using them.
+	 declare -A myassarray
+
+ Defining Associative Arrays:
+		 myassarray=([name]=“bash shell scripting” [version]=4.4)
+			 Or
+		 myassarray[name]=“bash shell scripting”
+		 myassarray[version]=4.4
+
+ Simply Associative Arrays are called key-value pair representation.
+
+
+#Differences between Indexed Arrays and Associative Arrays
+
+>Associative Arrays should be declare before using them (declare –A myassarray).
+>echo “${indexarray}” -> will print first value by default
+>echo “${myassarray}” -> wont print any value
+>Indexed Array Indices are numbers
+>Associative Array Indices are strings
+
+
+$ myarray=()
+$ newarray=(4 6 "bash shell" 8.9)
+$ onemorea=([5]=78 [9]="script" [56]=700)
+$ declare -a myarrayx
+$ myarrayx=(4 5 6)
+
+
+$ declare -A assosiatearray
+$ assosiatearray=([name]="bash shell scripting" [version]=4.4)
+
+
+$ assosiatearray[name]="bash"
+$ assosiatearray[version]=4.4
+$ echo "${assosiatearray[@]}"
+4.4 bash
+$ echo "${!assosiatearray[@]}"
+version name
+
+$ echo "${assosiatearray[version]}"
+4.4
+
+$ myarrayx=(4 5 6)
+$ echo "${myarrayx}"
+4
+
+$ echo "${assosiatearray}"		->display nothing because it doesn't depend on index values
+
+
+
+#Introduction to loops:
+ Most languages have the concept of loops and they are very useful to execute
+series of commands for n number of times.
+
+ Types of loops:
+	 for loop
+	 while loop
+	 until loop
+	 select loop
+
+	
+#Different ways to use for loop:
+
+ Basic for loop:
+	for variable in list_of_values
+	do
+	  command1
+	  command2
+	done
+	
+ C-Language type for loop:
+
+for((initialization; condition; increment/decrement))
+do
+  command1
+  command2
+done
+
+$seq 1 20
+#Different ways to use for loop:
+
+ Infinity for loop:
+for((;;))
+do
+  command1
+  command2
+done
+
+
+#shell script to install vim,httpd,ngnix packages
+
+#!/bin/bash
+#Author: Narendra 
+#Installing mutliple pkags
+
+if [[ $# -eq 0 ]]
+then
+  echo "Usage: $0 pkg1 pkg2 ...."
+  exit 1
+fi
+
+
+if [[ $(id -u) -ne 0 ]]
+then
+  echo "Please run from root user or with sudo privilage"
+  exit 2
+fi
+
+
+for each_pkg in $@
+do
+  if which $each_pkg &> /dev/null
+  then
+     echo "Already $each_pkg is installed"
+  else
+     echo "Installing $each_pkg ......"
+     yum install $each_pkg -y &> /dev/null 
+     if [[ $? -eq 0 ]]
+     then
+       echo "Successfully installed $each_pkg pkg"
+     else
+       echo "Unable to install vim $each_pkg"
+     fi
+  fi
+
+done
+-----------------------------------------------------------
+
+#break and continue:-
+-> break and continue commands are used to control the executuin of loops
+->break
+	-break command is used to terminate/exit current loop completelu before the actual ending of loop
+
+->continue
+	-contunue command is used in script to skip current iteration of loop & contunue to next iteration of the loop
+
+
+
+#For loop with arrays
+
+ For loop syntax:
+
+for eachValue in docker nginx
+do
+	echo “The service is: $eachValue
+done
+
+myServices=(docker nginx)
+for eachValue in ${myServices[@]}
+do
+	echo “The service is: $eachValue
+done
+
+
+#Connecting to a remote server:
+
+ We can connect to a remote server using ssh from our local/working server.
+
+ They are two ways to connect with remote server using ssh.
+	 Using password or Password Authentication)
+	 Using ssh-keys (Password-less Authentication)
+
+
+#Executing commands on remote server:
+
+ Two ways (for both password and password less Authentication)
+
+ First way:
+	 ssh user_name@remote_server
+	 Provide the password if it is password authentication connection.
+	 Now run the command and see the result
+	 Run exit command to close remote session
+	 Note: This is not good for automation
+
+ Second way:
+	 ssh user_name@remote_server “command”
+	 Provide the password if it is password authentication connection.
+	 This is good for automation, if the connection is password less authentication
+
+ Note: ssh -t user_name@remote_server “command”
+ ssh -t -o StrictHostKeyChecking=No user_name@remote_server “command”	
+
+
+
+
+
+
+#Using Passwrod:
+
+ssh user_name@remote_ip
+
+ssh remote_ip   (here remote user name is same as local terminal user)
+
+vi /etc/ssh/sshd_config (Make it; PasswordAuthentication yes  in remote server)
+========================================================================
+
+Using passwordless:
+-------------------
+Step1: On local server generate keys using ssh-keygen
+Step2: go to user_home/.ssh then here you will find two files
+		id_rsa  (private key, it should be safe)
+		id_rsa.pub (public, this has to share with remote servers)
+Step3: use below command to share public key with remtoe server, it will ask password
+       ssh-copy-id username@remote_server_ip    
+Step4: if step3 is success then use below command to login with remote server, it wont ask password now
+        ssh username@remote_server_ip
+
+
+
+
+#Executing commands on remote server:
+
+Executing command on remote server without logging into remote server:
+ ssh -t -o StrictHostKeyChecking=No user_name@remote_server “command”
+
+
+Executing multiple commands on remote server without logging into remote server
+ ssh -t -o StrictHostKeyChecking=No user_name@remote_server “cmd1;cmd2;cmd3”
+
+
+
+$ssh user@192.168.4.1 
+yes ,password
+
+cat .ssh/known_hosts
+rm -rf .ssh/known_hosts 	->remove old known saved hosts
+
+permission denied:-
+vi /etc/ssh/sshd_config 
+PasswordAuthentication yes		->allow to connect
+systemctl restart sshd
+
+ssh-keygen
+ssh-copy-id user@ip_address
+password
+ssh user@ip_address
+
+man ssh  ->-o ->StrictHostKeyChecking
+
+ssh -o StrictHostKeyChecking=No user@ip_address
+(it won't ask for confermation yes or no direct connect)
+
+ssh -o StrictHostKeyChecking=No user@ip_address "command"
+ssh -o StrictHostKeyChecking=No user@ip_address "date"
+server1_date=$(ssh -o StrictHostKeyChecking=No user@ip_address "date")
+echo $server1_date
+server1_date=$(ssh -o StrictHostKeyChecking=No user@ip_address "date") > server1_info.txt
+
+server1_date=$(ssh -o StrictHostKeyChecking=No user@ip_address "uptime") >> server1_info.txt
+
+
+
+ssh -o StrictHostKeyChecking=No user@ip_address "top"
+error-TERM envionment variable not set 
+(some command terminal interaction output) ->-t
+(ssh -t -o StrictHostKeyChecking=No user@ip_address "uptime"
+
+ssh -t -o StrictHostKeyChecking=No user@ip_address "uptime"
+
+new_out=$(ssh -t -o StrictHostKeyChecking=No user@ip_address "uptime)
+echo $new_out
+
+ssh -t -o StrictHostKeyChecking=No user@ip_address "uptime;date;free -h"
+
+
+ssh -t -o StrictHostKeyChecking=No user@ip_address "date"
+
+#Providing password for ssh using sshpass:
+->sshpass is Non-interactive ssh password authentication
+(without entering password again and again run command)
+
+ssh -t -o StrictHostKeyChecking=No user@ip_address "date"
+$sshpass
+$sshpass -p "enter_password" ssh -t -o StrictHostKeyChecking=No user@ip_address "date"
+$sshpass -p "enter_password" ssh -t -o StrictHostKeyChecking=No user@ip_address "uptime"
+$sshpass -p "enter_password" ssh -t -o StrictHostKeyChecking=No user@ip_address "free -h"
+$sshpass -p "enter_password" ssh -t -o StrictHostKeyChecking=No user@ip_address "w"
+
+(*.* w command in Linux is used to show who is logged on and what they are doing. This command shows the information about the users currently on the machine and their processes.)
+
+vim pass  -> save password in file
+$sshpass -f pass ssh -t -o StrictHostKeyChecking=No user@ip_address "w"
+
+password exported in a vaibale SSHPASS
+$export SSHPASS="password@123"
+$sshpass -e ssh -t -o StrictHostKeyChecking=No user@ip_address "w"
+
+
+$sshpass
+$sudo yum install sshpass -y
+
+
+#Exeuting Multiple Commands on Multiple Servers:->
+
+$sshpass -f passwordfile ssh -o StrictHostKeyChecking=No user@ip_address "date"
+$sshpass -f passwordfile ssh -o StrictHostKeyChecking=No user@ip_address "free -m"
+$sshpass -f passwordfile ssh -o StrictHostKeyChecking=No user@ip_address "uptime"
+
+
+
+
+#shell scrit to execute different commands on different servers with dfferent users and different passwords
+
+
+
+
+#Different ways to use while loop:
+
+ Infinity while loop:
+	while:
+	do
+	  statements/commadns
+	done
+		
+		or
+			
+	while true
+	do
+	  statemeent/command
+	done
+	
+	
+ While loop with command:
+
+while command
+do
+  statements/commadns
+done
+
+	or
+	
+while [[ 3 -gt 5 ]]
+do
+  statements/commadns
+done
+
+#Different ways to use while loop:
+
+ Reading a file content:
+while read content of file line by line
+and for loop read content values based on spaces
+
+while read line
+do
+  statements/commadns
+done < file_name
+
+
+ Reading command output:
+
+command | while read line
+do
+  statements/commadns
+done
+
+
+#While with IFS:
+ IFS: Internal Field Separator, which is one of the shell or environment variable.
+ The IFS variable is used as a word separator (token) for the loops.
+ If we are going to change the default IFS, then it is a good practice to store the original IFS in a variable.
+
+ While syntax with IFS:
+while IFS=":" read field1 field2 field3
+do
+  statements/commadns
+done < file_name
+
+
+command | while IFS=":" read field1 field2 field3
+do
+  statements/commadns
+done < file_name
+
+
+#Introduction to Functions:
+
+▪ A Function is a block of code that performs a specific task and which is reusable.
+▪ Functions concept reduces the code length.
+▪  Calling a function is exactly same as calling any command
+
+▪ Two ways to define a function:
+mycode()
+{
+  command/statment
+}
+
+or
+
+function mycode()
+{
+  command/statment
+}
+
+
+
+#Scope of the Variables in Functions and Returning variable value from a Function
+
+#Variables in Functions
+ There are two types of variables.
+
+ They are:
+	 Global
+	 Local
+
+ All variables are global by default.
+ Local variables are allowed to define inside of function only.
+
+ Return a variable value using return key or echo command
+
+
+#Passing parameters to a Function
+
+#Functions with parameters:
+ Passing Parameters to a Function:
+
+ Syntax:
+	 function_name $x $y
+	 We can access passed parameters inside a function using $1 $2 ......
+
+
+
+#Complete printf command:
+
+
+#printf command:
+▪ Both echo and printf commands are used to display string or value of a variable.
+▪ The difference is that echo sends a newline at the end of its output, there is no way to "send" an EOF in printf command.
+
+▪ The advantage of printf command:
+	▪ We can format the output
+	▪ Useful in awk command/scripting as well
+▪ Syntax:
+	▪ printf “format\n” “arguments”
+	▪ printf “format_with_modifiers\n” “arguments”
+
+▪ Note: format/format_with_modifiers is an optional and we can omit it.
+
+
+printf command with only format:
+▪ Syntax:
+	▪ printf “format\n” “arguments”
+▪ Different types of formats are:
+
+%d	signed decimal numbers
+%i	signed decimal numbers
+%u	unsigned decimal numbers
+%o	unsigned octal numbers 
+%x	unsigned hexadecimal numbers with lower case lettes(a-f)
+%X	unsigned hexadecimal numbers with upper case lettes(A-F)
+%f	floating point numbers
+%s	string
+%%	for percentage % symbol
+
+
+##printf command: format with modifiers:
+▪ Syntax:
+	▪ printf “format_with_modifiers\n” “arguments”
+▪ Different types of format modifiers are:
+
+N		This specifies the width of the field for output
+*		This is the placeholder for the width
+-		To left align output in the field.(Default: Right align)
+0		Pad result with leading 0s
++		To put + sign before positive numbers and - sign for negative numbers.
+
+
+
+$ tput cols		->get no colmn in terminal
+101
+$ tput lines
+13
+
+[ajay@ajaycentos BaSH]$ printf "%104s" " " | tr " " "-"
+--------------------------------------------------------------------------------------------------------
+
+[ajay@ajaycentos BaSH]$ printf "%5d\n" "$x"
+    4
+[ajay@ajaycentos BaSH]$ printf "%05d\n" "$x"
+00004
+
+[ajay@ajaycentos BaSH]$ printf "%0.2f\n" "$y"
+43.30
+[ajay@ajaycentos BaSH]$ printf "%20.2f\n" "$y"
+               43.30
+[ajay@ajaycentos BaSH]$ printf "%020.2f\n" "$y"
+00000000000000043.30
+[ajay@ajaycentos BaSH]$ printf "%-20.2f\n" "$y"
+43.30
+
+
+[ajay@ajaycentos BaSH]$ printf "%*f\n" "$p" "$y"
+           43.300000
+[ajay@ajaycentos BaSH]$ printf "%${p}f\n" "$y"
+           43.300000
+
+
+
+
+
+#AWK
+
+
+$ systemctl status httpd
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:httpd.service(8)
+
+$ systemctl status httpd | awk 'NR==3 {print $2}'
+inactive
+
+$systemctl status httpd > demo4.txt
+
+$awk 'NR==3 { print $2 }' demo4.txt 
+inactive
+
+$ awk '{ print $2 }' demo4.txt 
+httpd.service
+loaded
+inactive
+man:httpd.service(8)
+
+$cat /etc/passwd | awk -F : '{print $1}'
+root
+ajay
+.
+.
+
+awk '{ }' /etc/passwd
+$ awk '{ print "ok" }' /etc/passwd
+ok
+ok		ok print number of line time
+
+$ awk '{ print "ok","shell script" }' /etc/passwd
+
+$ awk '{ print $0 }' /etc/passwd		->complete file print
+
+$awk '{ print $3,$1 }' demo4.txt 
+
+$ awk '{ print $3,$1, "suign awk command" }' demo4.txt 
+
+$ awk '{ print NR,$3,$1 }' demo4.txt 
+1 first this
+2 second this
+3 third this
+
+
+$ awk '{ print NR }' demo4.txt 
+1
+2
+3
+
+$ awk '{ print NF }' demo4.txt 
+7
+4
+6
+
+$ awk '{ print NR,NF }' demo4.txt 
+1 7
+2 4
+3 6
+
+
+$ awk '{ print "The line no is:",NR," The no of field are:",NF }' demo4.txt 
+The line no is: 1  The no of field are: 7
+The line no is: 2  The no of field are: 4
+The line no is: 3  The no of field are: 6
+
+
+$ awk '{ print $NF }' demo4.txt 
+kdsfl
+line
+lkfd
+
+
+$ awk '{ print FILENAME }' demo4.txt 
+demo4.txt
+demo4.txt
+demo4.txt
+
+$ awk '{ print FILENAME,$1 }' demo4.txt 
+demo4.txt this
+demo4.txt this
+demo4.txt this
+
+
+$ awk '/root/ { print FILENAME,$0 }' /etc/passwd 
+/etc/passwd root:x:0:0:root:/root:/bin/bash
+/etc/passwd operator:x:11:0:operator:/root:/sbin/nologin
+
+
+$ awk 'NR>=3 { print NR,$0 }' /etc/passwd 
+3 ewfl; 
+4 w
+5
+
+
+$awk ' ' /etc/passwd
+
+$ awk 'BEGIN { print "ok"}'
+ok
+
+$ awk 'BEGIN { print "ok"}' /etc/passwd
+ok
+
+$ awk 'BEGIN { print "=======working on /etc password file ======" } /root/ { print $0 } END { print "===========complete work on /etc/passwd file===============" }' /etc/passwd
+=======working on /etc password file ======
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+===========complete work on /etc/passwd file===============
+
+
+
+$ awk -f myawk.awk /etc/passwd
+=======working on /etc password file ======
+root:x:0:0:root:/root:/bin/bash
+operator:x:11:0:operator:/root:/sbin/nologin
+===========complete work on /etc/passwd file===============
+
+
+$ awk '{ print $3 }' demo4.txt 
+
+$ cat -n /etc/passwd
+
+$ awk -F : '{ print $1 }' /etc/passwd
+
+$ awk -F : '{ print $1,$5 }' /etc/passwd
+
+$ echo "/home/ajay" | awk -F / '{ print $3 }'
+ajay
+
+$ echo "/home/ec2-user" | awk -F ec2 '{ print $2 }'
+-user
+
+$ echo "/home/ec2-user" | awk -F ec2 -v x=5 '{ print $2, x }'		->define the variable
+-user 5
+
+$ echo "/home/ec2-user" | awk -F ec2 -v x=5 -v y=6 '{ print $2, x, y }'
+-user 5 6
+
+awk -f action.awk demo4.txt
+is
+is
+is
+
+
+$ awk 'BEGIN { print "hellow world " }'
+
+$which awk
+/usr/bin/awk
+
+$./hello.awk
+Hello World
+
+
+$awk -f hello.awk  -> no need to write shibang line in script
+Hello World
+
+$ awk 'BEGIN { x=5 }' 
+$ awk 'BEGIN { x=5 ; print x }' 
+5
+
+$ awk -f simple.awk
+
+$./simple.awk 
+
+#!/usr/bin/awk -f
+BEGIN {
+  a=5 ;
+  print a
+  }
+
+	or
+	
+	#!/usr/bin/awk -f
+BEGIN {
+  a=5
+  print a
+  }
+
+	or
+	
+#!/usr/bin/awk -f
+BEGIN {
+  a=5 ; print a
+  }
+
+
+$ echo "4 7" | awk '{ print "a=" $1, "b=" $2 }'
+a=4 b=7
+
+$ awk '{ print "a=" $1, "b=" $2 }' ab.txt
+a=34 b=43
+
+$ awk '{ a=$1; b=$2; print a,b }' ab.txt
+34 43
+
+$ awk '{ a=$1; b=$2; print "a="a,"b="b }' ab.txt
+a=34 b=43
+
+$ awk '{ a=$1; b=$2; print a,b }' ab.txt
+34 43
+4 3
+
+$ awk -f display_a_b.awk ab.txt 
+a=34 b=43
+a=4 b=3
+
+$ ./display_a_b.awk ab.txt 
+a=34 b=43
+a=4 b=3
+
+$ ./display_a_b.awk ab.txt 
+Begin block statement execute only once a b for ab.txt
+a=34 b=43
+a=4 b=3
+Complete reading a and b value in ab.txt. END also execute once. action execute on ecery line of file
+
+
+$ awk 'BEGIN { print "hii" }'
+
+$ awk -f hii.awk 
+hii
+
+
+
+$ ./demos.sh 
+
+#!/usr/bin/env bash
+
+pwd
+date
+awk 'BEGIN { print "hii" }'
+
+
+./demos.sh
+
+#!/usr/bin/env bash
+
+pwd
+date
+a=$(awk 'BEGIN { print "hii" }')
+b=$(awk -f hii.awk)
+
+echo "a value is: $a"
+echo "b value is: $b"
+
+
+$ echo "3 4" | awk '{a=$1 ; b=$2; print a , b}'
+3 4
+
+a=4
+b=3
+echo "$a $b" | awk '{x=$1 ; y=$2; print "x+y="x+y }'
+
+$ a=4
+$ b=4
+$ awk -v x=$a -v y=$b '{ print x+y }' nothing.txt		-> input reading from BEGIN block not from file
+8
+
+$ awk -v x=$a -v y=$b 'BEGIN { print x+y }'
+8
+
+$ ./read_values.sh
+
+
+
+#sed command
+
+$ sed -n 'p' file.txt 
+	or
+$ sed '' file.txt 
+  or simila cat command
+$ cat file.txt
+
+
+$ sed 'p' file.txt 	-> print 2 time each lines . 1 is default print by sed command 2nd is print by option p
+
+$ sed -n 'p' file.txt ->supress default output show only p output. print once
+
+$ sed -n '3p' file.txt 		-> print 3 line of file
+$ sed -n '$p' file.txt 		-> print last line of file
+$ sed -n '3,10p' file.txt   -> print from line3 to line10 
+$ sed -n '5,$p' file.txt   -> print from line 5 to last line
+$ sed -n '5,+3p' file.txt   -> print from line5 and plus 3 more line means total 4=5th+3 lines
+
+$ sed -n '1~2p' file.txt   => print line 1 then line 3 so on alternative 1,3,5,7,9..
+$ sed -n '1~3p' file.txt   => print line 1 then line 4 so on altenative of 3. 1,4,7,11....
+
+$ sed '4d' file.txt  -> delete 4 line or don't print 4 line
+$ sed '4,$d' file.txt => delete from line 4 to last line.( only print line 1 to 3)
+$ sed '4,6d' file.txt -> delete from line 4 to line 6 or do not print line 4 5 6
+
+$ sed -i '6,10d' file.txt  => change or insert in orignal file . delete line 6 to line 10
+$ sed -i.back '4,5d' file.txt -> it will take backup of orignal file and then change in orignal file
+$ sed -i.back '4,$d' file.txt -> delete from line 4 to last line and take backup or oginal file
+
+
+$ sed -n '6,10p' file.txt
+$ sed -n '3,10p' file.txt
+
+$ sed -n '/ajay/p' file.txt   -> search ajay and p print lines that match keyword 'ajay'
+7 ajay
+
+$ sed -n -e "/ajay/p" -e "/hii/p" file.txt		->-e to execute multiple command  search multiple string in file and print match keyword lines
+1 hii 
+4 hii
+7 ajay
+
+$ sed -n -e "/ajay/p" -e "/hii/p" -e "/sharma/p" file.txt -> search multiple keyword -e to execute multiple command
+
+$ seach_word="ajay"
+$ sed -n "/$seach_word/p" file.txt
+7 ajay
+
+$ sed '7,$!d' file.txt  -> ! revers range donot delete 7 to last line .and delete everything
+7
+8
+9
+.
+.
+
+$ sed '/ajay/d' file.txt  => delete line which have ajay
+$ sed '/hii/!d' file.txt => delete every line and donot delete which have "hii"
+hii
+hii
+e hii
+
+$ sed -i.back '/hii/!d' file.txt  -> donot delete line which have "hii" and delete everything . take backup of orignal file
+$cat file.txt
+hii this is sed command similar to cat
+4 hii
+
+
+$cat /etc/passwd > demo_passwd.txt
+$ sed 's/root/pink/' demo_pass.txt		-> substitue or replace "root" with "pink", it replace 1st match of line
+$ sed 's/root/pink/g' demo_pass.txt1  => it replace globally all match keyword replce by "pink"
+
+$ sed -i.back 's/root/pink/g' demo_pass.txt  -> take backup of orignal file before modify to backup
+$ sed -i.back 's/root/pink/2' demo_pass.txt => replace only 2nd occrance of root with pink in every line
+ 
+$ sed -n '/ajay/p' file.txt -> seach ajay , and print line that have "ajay"
+$ sed '/hii/s/ajay/ajaysharma/' file.txt  -> seach hii lines and substitue "ajay" with "ajaysharma"
+$ sed '/hii/s/ajay/ajaysharma/g' file.txt  -> replace globally ajay with ajaysharma
+
+$ sed '/s/old/new/' file.txt  -> first occured old world will be replace with new word in each and every line
+$ sed '/s/old/new/' file.txt -> replace all old worlds with new world on each and every line
+$ sed '/s/old/new/2' file.txt -> replace second occured old word with new word
+$ sed '/search/s/old/new/g' file.txt -> replace the old word with new word if that line consist of seach word 
+
+
+i-insert before some line number
+a-insert after some line number
+d-delete afte some line number
+
+$ sed "2i new line inserted before 2nd line" file.txt
+$ sed "2a new line inserted after 2nd line" file.txt
+
+$ sed -i '1i Employee line change agaian' file.txt	-> inserted before line 1 in orignal file
+$ sed -i '1a after line 1 ============' file.txt  => insert after 1st line in orignal file
+$ sed -i '$a after last line ============' file.txt -> insert after last line in orignal file
+
+$ sed -i '/ajay/i insert before word ajay' file.txt -> insert before word ajay 
+$ sed -i '/pink/a insert after word pink' file.txt  -> insert after word pink
+
+$ sed -i '3d' file.txt  -> delete 3rd line
+$ sed -i '/pink/d' file.txt -> delete line that have pink word
+
+$ sed -i ‘/venky/i madhu 6000’ data1
+
+$ sed -n '/last/p' file.txt
+after last line ============
+
+
+#regex
+$ sed -n '/put/p' file.txt
+put line
+
+$ sed -n '/p[uo]t/p' file.txt		-> eithe pattern two words put or pot regex called
+put line
+pot line
+
+$ sed -n '/p[uoe]t/p' file.txt	->3 possible word match according patern called regex
+put line
+pot line
+pet line
+
+$ sed -n '/\s/p' file.txt  -> print line which have spaces(\s)
+$ sed -n '/\\s/p' file.txt => print line which have \s
+$ sed -n '/\t/p' file.txt -> print line which have tabs
+tabspace	tab	tab
+$ sed  -n '/p.t/p' file.txt -> any character in place of "."
+
+$ sed  -n '/\sp.t/p' file.txt -> print p.t ->.-any characeter but before space myst
+hii pyt space before
+
+$ sed  -n '/\sp.t\s/p' file.txt ->starting and ending with space and match any charter that "."
+hii pyt space before
+	or
+$ sed  -n '/\sp.t\s/p' file.txt
+hii pyt space before
+
+$ sed  -n '/./p' file.txt -> print everyline
+
+$ sed  -n '/\./p' file.txt -> print line have dot
+dot line .
+
+$ sed -n '/This*/p' file.txt
+Thi
+This
+Thiss
+Thisss
+Thissss
+Thisssss
+
+s may be 0 time or more time 
+This* -> Thi This Thiss Thisss Thissss Thisssss
+
+s atleast one time there more than one time possible
+This\+ -> This Thiss Thisss Thissss Thisssss
+$ sed -n '/This\+/p' file.txt
+This
+Thiss
+Thisss
+Thissss
+Thisssss
+
+
+This\? -> match zero time or one time
+$ sed -n '/This\?/p' file.txt
+Thi
+This
+Thiss
+Thisss
+Thissss
+Thisssss
+
+$ sed -n '/This\?\s/p' file.txt  => after this must be space
+This space
+Thi space
+
+
+# ^ and $
+
+$ sed -n '/put/p' file.txt
+put line
+this is put middle.
+this is end put
+
+$ sed -n '/put\s/p' file.txt
+put line
+this is put middle. 
+
+$ sed -n '/^put\s/p' file.txt
+put line
+
+
+$ sed -n '/^put/p' file.txt  =>lines starting with put
+put line
+
+$ sed -n '/put$/p' file.txt  -> lines ending with put
+this is end put
+
+$ sed -n '/^$/p' file.txt  -> empty line . start with nothing and end with nothing
+		empty lines
+$ sed '/^$/d' file.txt  ->delete empty lines
+$ sed -i '/^$/d' file.txt  => delete in orignal file
+
+
+$ sed -n '/$/p' file.txt	->with $ no pattern so it will print all lines
+$ sed -n '/^/p' file.txt    ->with ^ no pattern so it will print all lines
+
+$ sed -n '/\$/p' file.txt		->seach for $
+$ sed -n '/\^/p' file.txt 		=>search for ^
+
+$ sed -n '/p[ouy]t/p' file.txt	-> from o u y any match character b/w p and t
+put line
+pot line
+this is put middle.
+$ sed -n '/p[a-o]t/p' file.txt	-> from a to o range any match character b/w p and t
+pot line
+pet line
+practicepot 
+
+$ sed -n '/p[a-ch-im-qx-z]t/p' file.txt		->different ranges words match
+$ sed -n '/This\{3\}/p' file.txt	-> match "s" have 3time reption of "s"
+Thisss 
+Thissss
+Thisssss
+
+$ sed -n '/This\{3\}\b/p' file.txt	-> which have space end of 3s matched
+Thisss 
+
+$ sed -n '/This\{3,4\}\b/p' file.txt	->match s 3times or 4times only
+Thisss 
+Thissss
+
+$ sed -n '/This\{3,\}\b/p' file.txt		=> match s 3times or greater than 3times
+Thisss 
+Thissss
+Thisssss
+
+$ sed -n '/\(tab\)\{2\}/p' file.txt		->2time tabtab in lines in group
+tabtab
+hii tabtab sequace
+hii tabtabsomething
+
+$ sed -n '/\(tab\)\{3\}/p' file.txt		-> 3times tabtab match in group sequence
+tabtabtab
+3time tabtabtab
+
+$ sed -n '/\(tab\)\+/p' file.txt	-> atleast one time or more time \+
+hii tabtabsomething
+tabtab
+hii tabtab sequace
+tabtabtab
+3time tabtabtab
+tabspace	tab	tab
+
+
+$ sed -n '/\b\(tab\)\+/p' file.txt	-> \b have space before tab word match one time or more than one time
+hii tabtabsomething
+tabtab
+hii tabtab sequace
+tabtabtab
+3time tabtabtab
+tabspace	tab	tab
+
+
+=================================================================
+
+$wget --version
+$curl --version
+
+$curl https://mirrors.edge.kernel.org/pub/software/scm/git/		-> it will display your page
+
+$wget https://mirrors.edge.kernel.org/pub/software/scm/git/	->-it will download html page
+$ls
+index.html
+$cat index.html			->content of html page
+
+$sh get_git_version.sh
+
+
+$ line="<a href="git-0.02.tar.gz">git-0.02.tar.gz</a>"  
+$ echo $line | sed -n '/git-[0-9]\+\./p'  ->git- 0-9 nuber many one time more than one\+ \. match
+
+
+<a href="git-htmldocs-2.4.1.tar.gz">git-htmldocs-2.4.1.tar.gz</a> 13-May-2015 22:21 2M
+<a href="git-2.4.1.tar.gz">git-2.4.1.tar.gz</a> 13-May-2015 22:20 5M
+		|_>
+sed -n '/git-\([0-9]\+\.\)\+tar.gz/p   -> [0-9]\+\. group may be 3times repeates group may one or more time 3time digit pattern , ending word tar.gz
+
+git-2.4.1.tar.gz	->match this
+git-htmldocs-2.4.1.tar.gz  -> not match this
+
+'/git-\([0-9]\+\.\)\+tar.gz/p'	-> only get tar.gz file not htmldoc files
+
+
+$ echo "git-2.7.5.tar.gz" | awk -F '-' '{ print $2 }'
+2.7.5.tar.gz
+		or
+		
+$ echo "git-2.7.5.tar.gz" | cut -c 5-9		-> 5th char to 9th char cut  but proble if version is two digit then we get 4.53.		missing last digit
+2.7.5
+
+$ echo "git-2.7.5.tar.gz" | cut -c 5-
+2.7.5.tar.gz
+
+$ echo "git-2.7.5.tar.gz" | cut -c 5- | awk -F '.tar.gz' '{ print $1 }'
+2.7.5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+for each in 1 2 3 4 5
+do
+	echo "welcome to game"
+	echo -e "welcome to game1\n"
+done
+

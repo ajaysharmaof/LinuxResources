@@ -1,0 +1,445 @@
+
+1 ❑ Interrupt the boot process to Set the root password as password.
+rd.break=ram disk break
+▪ Wait for GRUB menu to appear and then press e to edit.
+▪ Find the line starting with linux and ctrl+e end of line. enter the rd.break at the end.
+▪ Press Ctrl+x to boot the system with these Kernel boot parameters. system is started  in emergency state or emergency shell
+▪ At this stage, root file system is mounted in read only mode to /sysroot and must be remounted with r/w permissions.
+
+$ mount
+
+▪ To mount the root file system with r/w permissions
+$ mount -o remount,rw /sysroot
+
+chrooted shell started with this
+▪ Switch /sysroot to / file system
+$ chroot /sysroot
+▪ To set the root password
+# passwd
+
+▪ To relabel the Selinux contexts
+# touch /.autorelabel
+
+exit
+exit
+
+
+
+2 ❑ Set the SELinux on System in enforcing mode.(security enhance linux selinux)
+
+$ getenforce 			To check SELinux mode
+$ vim /etc/selinux/config			 Set the variable SELINUX=enforcing
+$ systemctl reboot
+$ sestatus or getenforce
+$ man sestatus
+$ id
+
+
+
+
+3 ❑ Set up local yum (dnf) repositories ,BaseOS and AppStream at location /repo/BaseOS and /repo/AppStream on System.
+
+• Repo should be created with yum group information to use yum group.
+$ dnf repolist 			To list repositories configured on system
+	or
+$ yum repolist
+
+$ dnf grouplist hidden			 To list available group packages
+
+$ mkdir -p /repo/BaseOS /repo/AppStream		 To create directories for repositori
+
+$ cp -irv /run/media/pbajaj/CentOS*/BaseOS/* /repo/BaseOS 			Copy packages and repodata for BaseOS
+$ cp -irv /run/media/pbajaj/CentOS*/AppStream/* /repo/AppStream 		Copy packages and repodata for AppStream
+
+i- for interactiv r-recursive v-verbose
+
+
+# mkdir -p /repo/BaseOS /repo/AppStream
+
+$ scp /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso ajay@192.168.0.9:/home/ajay/Downloads/
+
+#mount iso first
+
+# mkdir /media/ISO/CentOS
+# mount -t iso9660 -o loop /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso /media/ISO/CentOS
+
+cd BaseOs
+repodata Packages
+repodata 	in repodata  .xml file content repo meta data   about package or yum
+all rpm packages
+Packages
+repo meta data require for yum  require to run
+
+## mount -t iso9660 -o loop /home/ajay/Downloads/CentOS-8.4.2105-x86_64-boot.iso /media/ISO/CentOS
+
+# cp -irv /run/media/ajay/CentOS/BaseOS/* /repo/BaseOS 
+# cp -irv /run/media/ISO/CentOS/AppStream/* /repo/AppStream
+
+
+#or mount iso file 
+vm ->storage->Controller:IDE->add iso file it will automatically mount iso file in /media/ajay/ 
+
+check with iso file mounted on
+$ df -h		you see iso mouted file
+$ man dnf
+
+
+
+
+
+
+
+
+4 ❑ Configure System to use BaseOS & AppStream repositories present at /repo/BaseOS and /repo/AppStream respectively.
+	
+/etc/yum.conf
+# vim /etc/yum.repos.d/system.repo	Creating .repo file to configure System to use repos.
+
+# cd /etc/yum.repos.d/
+# ls -lrt
+# mkdir /backup			create all .repo file in backup folder
+# mv * /backup/
+
+baseurl = http://
+baseurl = ftp://
+baseurl = file:///repo/BaseOS		local repo
+
+[BaseOS]
+name = BaseOS
+baseurl = ///repo/BaseOS   	#local base repo enable(1) gpgcheck(gnu privacy gurard check)
+gpgcheck = 0			gpgcheck=1 then also gpgkey=pubkey
+enabled =1			enabled(1) repo
+[AppStream]
+name = AppStream
+baseurl = ///repo/AppStream
+gpgcheck = 0			gpgcheck=disable(0)
+enabled = 1
+
+:wq
+
+or
+
+[BaseOS]
+name = BaseOS
+baseurl = file:///repo/BaseOS
+gpgcheck = 0
+enabled = 1
+
+[AppStream]
+name = AppStream
+baseurl = file:///repo/AppStream
+gpgcheck = 0
+enabled = 1
+
+# more /etc/yum.conf 
+[main]
+gpgcheck=1
+installonly_limit=3
+clean_requirements_on_remove=True
+best=True
+skip_if_unavailable=False
+
+
+# dnf/yum clean all			 To clear cache
+
+
+# yum/dnf repolist			To list repositories configured on System
+baseos appstream
+
+#dnf grouplist hidden			 To list group available packages
+
+# man yum.conf				 Manual page for yum.conf
+
+
+disable subscription manager warning
+# vim /etc/yum/pluginconf.d/subscription-manager.conf
+enabled=0			set to 0 disable warning
+# yum repolist
+
+
+subscription-manager:-
+
+#subscription-manager register --serverurl SERVER_URL
+
+default severurl=subscription.rhsm.redhat.com		
+	
+specifiy in hostname directive in /etc/rhscm/rhsm.conf file under server section
+
+# vim /etc/rhsm/rhsm.conf
+# subscription-manger attach --auto		to subscribe the redhat
+	a file redhat.repo under /etc/yum.repo.d/ created automatcy
+	by default baseurl of redhat.repo on subcription baseurl=https://cdn.redhat.com	 in rhsm.conf
+
+In exam baseurl povided
+--baseurl=
+# subscription-manger register --baseurl BaseURL
+
+
+
+#more /etc/rhscm/rhsm.conf
+[server]			
+hostname= subscription.rhscm.redhat.com		default to register
+
+[rhsm]
+baseurl = https://cdn.redhat.com	 if you subscribe
+
+
+#subscription-manger --help
+register,remove,list,status,unregister,release,attach(for subscribe)
+
+# subscription-manger register --help
+--serverurl=SERVER_URL	to override default server url hostname= in rhsm.conf file
+
+# subscription-manager register
+restering subscription.rhsm.redhat.com:443/subscription
+username:
+password
+	or
+# subscription-manager register --serverurl subscription.rhsm.redhat.com
+restering subscription.rhsm.redhat.com:443/subscription
+username:
+password
+
+# cd /etc/yum.repos.d/
+# ls	nofile	redhat.repo file now create one file
+
+# subscription-manger attach --help
+	--auto to attach subscription
+
+## subscription-manger attach --auto
+subscribed
+# ls
+redhat.repo
+
+# more redhat.repo	all repo info
+
+# yum/dnf repolist
+	baseos appstream
+
+# dnf install httpd
+# subscription-manger list	
+subscribe expire date version etc
+
+# subscription-manger unregister	to unregister
+
+yum.repos.d #ls
+redhat.repo	empty file unregister
+
+# dnf repolist
+not regiseter system 
+
+
+#IPA SERVER
+
+#Services configured on IPA Server
+IPA Server machine is pre-configured to provide below services:
+
+
+▪ DNS Server – To provide Hostname resolution
+▪ Forward DNS lookup 			Result (Output)
+#host system.example.com		192.168.99.10
+#host ipaserver.example.com		 192.168.99.254
+
+
+▪ Reverse DNS lookup 			 Result (Output)
+# host 192.168.99.10			 system.example.com
+# host 192.168.99.254			 ipaserver.example.com
+
+We can also use #nslookup or #dig for same purpose.
+
+$ id
+$ hostname 	ipaserver.example.com
+$ ip addr show
+192.168.99.254
+
+forward lookup in dns server
+# host ipaserver.example.com
+ipaserver.example.com has address 192.168.99.254
+
+# host system.example.com
+system.example.com has address 192.168.99.10
+
+Reverselookup
+# host 192.168.99.254
+243.99.168.192 domain name pointer (dns) ipaserver.example.com
+
+# host 192.168.99.10
+10.99.168.192 domain name pointer (dns)   server.example.com
+
+
+▪ 389 Directory Server – Provides LDAP functionality to host LDAP users. Four users have been created on Directory Server.
+
+Username			 Home Directory
+ldap 				 /home/ldapuser/ldap
+ldap1				 /ldap/home/ldap1
+ldap2 				 /ldap/home/ldap2
+smb1				 /home/smb1
+
+
+$ id ldap
+$ id ldap1
+$ id ldap2
+$ id smb1
+ipaserver@ipaserver$
+$ su - ldap 
+ldap$ id 	ldapuser
+
+$ pwd	/home/ldapuser/ldap
+$ exit
+
+$ id	ipaserver
+
+
+
+▪ NTP Server -To provide time services
+
+Command 			Action/Description
+
+#vim /etc/chrony.conf		To allow network to use time services
+allow 192.168.99.0/24
+:wq				
+
+#systemctl restart chronyd 	  Restarting chronyd to make changes effective
+
+#firewall-cmd –add-service=ntp --permanent		 Configuring firewall to accept inbound traffic
+
+
+NTP server
+$ systermctl status chronyd	active
+$ more /etc/chrony.conf
+alllow 192.168.99.0/24		allow NTP client access from local network
+
+
+▪ NFS Server -To export LDAP user’s Home Directories and one more NFS share
+
+#dnf install nfs-utils 			Installing nfs-server package(s)
+
+# systemctl nfs-server --now enabled	 Starting and configuring service to start at boot
+
+#vim /etc/exports			Defining exports in exports file
+/nfsshare *(rw)
+/home/ldapuser *(rw)
+/ldap/home *(rw)
+:wq
+
+
+#exportfs -arv				 Exporting NFS exports
+#firewall-cmd --add-service={nfs,rpc-bind,mound} --permanent		 Configuring firewall to accept inbound NFS traffic
+
+#firewall-cmd --reload		 Reloading firewall to make configs effective
+
+
+
+NFS Service / Samba service
+$ systermctl status nfs-server			active
+$ more /etc/exports		list of nfs		nfs exports
+/nfsshare *(rw)
+/home/ldapuser *(rw)
+/ldap/home *(rw)
+
+$ systemctl status smb		active
+$ more /etc/samba/smb.conf
+[samba]			->share name
+comment = samba_share
+path = /samba
+writeable = yes
+
+
+▪ Samba Server
+#dnf install samba cifs-utils
+#systemctl smb --now enabled Starting/enabling smb.service
+
+#vim /etc/samba/smb.conf
+[samba]
+comment = samba_share
+path = /samba
+writable = yes
+:wq
+
+# systemctl restart samba 	Restarting smb.service to make changes effective
+#smbpasswd -a smb1		 Creating samba user profile for smb1 user
+
+#firewall-cmd --add-service=samba --permanent		 Configuring firewall to accept inbound traffic from client(s)
+
+#firewall-cmd --reload
+
+#semanage fcontext -a -t samba_share_t “/samba(/.*)?”		 Setting correct SELinux context type
+
+#restorecon -Rv /samba		Restoring context
+
+
+
+$ls -ldZ /samba				 samba  selinux context type check
+samba_share_t		correcct context
+
+$ getsebool -a | grep nfs	check selinux context on nfs
+nfs_export_all_ro --> on	 by default its on by selinux bool
+nfs_export_all_rw --> on
+
+$ getsebool -a | grep samba	check on samba
+samba_export_all_ro --> off        by default its off by selinux bool
+samba_export_all_rw --> off  if we on this bool then no need to set selinux context type on samba share
+
+$ su - root
+root@ipaserver# pdbedit -L	list samba user
+smb1	 user
+#exit
+
+$ firwall-cmd --list-all 
+dns http https kerberos ldap ldaps mountd nfs ntp rpc-bind samba ssh
+
+
+
+
+Importing IPASERVER appliance
+▪ Download IPA Server.zip file from One drive link as mentioned below. You need to use any existing Microsoft account to
+download same or create new account.
+https://1drv.ms/u/s!AlfVvq2Yryd6l9gN9MfddX_136c8zA?e=hNg7Dp
+Unzip and import the IPA Server.ova file in VirtualBox. You can do this by opening file and it will be automatically imported.
+▪ Wait for 3-4 minutes for import to complete and the start VM.
+▪ Login to IPA Server using password as password Verify different services provided by IPA Server.
+
+
+
+# sudo hostnamectl set-hostname ipaserver.example.com
+[sudo] password for ajay: 
+[ajay@ajaycentos ~]$ logout
+$ su - root
+Password: 
+[root@ipaserver ~]# 
+
+# hostnamectl
+   Static hostname: ipaserver.example.com
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: a3ea3ebf9fd9443d94c33e762ae49c0b
+           Boot ID: 62d80efff790483693c33960d6128a0b
+    Virtualization: oracle
+  Operating System: CentOS Linux 8
+       CPE OS Name: cpe:/o:centos:centos:8
+            Kernel: Linux 4.18.0-305.25.1.el8_4.x86_64
+      Architecture: x86-64
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,102 @@
+$ git init		->initialize local dir as repository 
+
+.git dir
+1) workspace/working directory
+	|add 
+	|
+2) staging area			->then send(add) to staging area from working directory to further commit to code
+	|
+	|commit
+3) local repo 		->snapshot/commit the selected files from staging area to local repo(commitID,Tag)
+	|					(master brach commit to github)
+	|push
+github->center repository storage
+
+commit ->store changes in local repostory you will get one CommitID(40 alphnumchar) uses sha256 checksum create a binaryID based on binary file size.convert file filesize into binary and save binarysize as binaryID. so new change file different size and different binaryID.(sha-1 hash funtion)
+
+commit-ID/versionID/version
+
+tags->add a tags with commit id(to extra info etc add index file )
+
+snapshots ->show commit code or changes/append data
+	
+					push
+push-> local repo -------->github(central repo)
+		push/copy data from local repo to remote repo(github)
+
+					pull
+pull ->remote repo --------->local repo		(sync data with local data)
+		pull is use to copy/sync data from remote repo to local repo.
+		
+
+branch -> default branch is master branch when we commit code
+		 we can create different branch separte through master branch.
+		 we can merge side branch to main branch code also
+		 
+		each task has one separate branch(can be merge with master branch)		 
+
+
+$ git config --global user.name "ajaysharma"
+
+
+$ git config --global user.email "ajaysharmaof@gmail.com"
+
+$ git config --list
+
+$ git config --global --edit		->to change config file
+
+
+$ git init			=>to initialize local repo
+
+$ git status		->2 files untracked red file 
+
+$ git add abc.txt cbd.txt
+	or
+$ git add .				->add files in staging area from workspace
+
+$ git status			=> green file only added not commited,staging area
+
+$ git commit -m "abc file added"			=>-m commit message,commot
+
+$ git status		=>nothing in working tree files move in staging area
+
+$ git log			=>show info about who commit ,with commitID
+		show username , commitID date 
+
+$ git show <commitID>		=>to see content of CommitID
+		see code of commit
+
+$ git remote add ogigin <github_repo_url>
+
+$ git push -u ogigin master 	=>for -u user , origin is github_repo_url
+	github username
+	github password 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

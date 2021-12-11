@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+#[[ -x demo ]] && echo "demo file have execution permission" || echo "demo file doesn't have execution permisssion"
+
+<< 'comm'
+if [[ -x demo ]]
+then
+  echo "demo is having execution permission"
+else
+  echo "demo is not having execution permission"
+fi
+
+if [[ -x loop1 ]]
+then
+  echo "loop1 is having execution permission"
+else
+  echo "loop1 is not having execution permission"
+fi
+
+
+comm
+
+
+
+#for each in loop1 demo
+for each in $(ls)
+do
+  if [[ -x loop1 ]]
+  then
+    echo "$each is having execution permission"
+  else
+    echo "$each is not having execution permission"
+  fi
+done
+
+

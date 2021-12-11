@@ -1,0 +1,251 @@
+https://www.oreilly.com/member/login
+Username  safaribooksonlinee3@gmail.com
+password   Mylove@123
+
+
+
+9.1
+
+automation
+6.8  
+du
+
+To monitor the disk usage of each running processes with iotop
+htop ,iotop
+
+
+aws ,python code 9may
+https://dipp.gov.in/sites/default/files/internship_scheme_11062019.pdf
+https://dipp.gov.in/
+
+🔰Coding Blocks Complete Package🔰
+https://mega.nz/folder/fIYVESDA
+Key- UeF2BkOiVNKrZILUhC-aGQ
+
+
+Everybody know leetcode.com right ?? But their subscription is too high to afford. Many people selling the account in high price. Basically monthly subscription is around 3.5k+ ...
+
+So here we are going to give you one site that provides all the leetcode Premium locked 🔐 questions for free . Also it provides the company tag and all . 
+
+You can visit to lintcode.com 
+And check out this site . You will get every question here . 
+
+18604197355
+
+
+jswsteel metal sector
+Asian Paint
+tata power
+itc
+bpcl
+polycab
+dixon
+cesc
+
+
+
+Top 10 Sites to review your resume for free:
+
+    Zety Resume Builder
+    Resumonk
+    Resume dot com
+    VisualCV
+    Cvmaker
+    ResumUP
+    Resume Genius
+    Resumebuilder
+    Resume Baking
+    Enhancv
+
+
+Top 10 Sites for your career:
+
+    LinkedIN
+    Indeed
+    Naukri
+    Monster
+    JobBait
+    Careercloud
+    Dice
+    CareerBuilder
+       Jibberjobber
+    Glassdoor
+
+Top 10 Sites for Interview Preparation:
+
+    Ambitionbox
+    AceTheInterview
+    Geeksforgeeks
+    Leetcode
+    Gainlo
+    Careercup
+    Codercareer
+    InterviewUp
+    InterviewBest
+    Indiabix
+
+
+3.02
+7689873808
+7339930426
+1-8050182576NA
+2- 9108646966NA
+3-4523452311
+8120300300
+9144-4444-33
+cat Coding\ Ninjas\ Data\ Science.tar.* | tar xvf -
+
+static file host provider web server
+snapd unistall all apps
+udisksctl unlock -b /dev/sda3
+openshift 
+openstack
+ansible
+*RH124 Red Hat System Administration I
+*RH134 Red Hat System Administration II
+*RH294 Red Hat System Administrator III: Linux Automation with Ansible
+the net ninja django
+1.52
+virtualenv name
+source bin/activate
+pip3 install django==3.1.4
+pip3 freeze > requirments.txt 
+
+django-admin startproject djcrm .
+.gitignore
+$python manage.py startapp leads
+
+
+-> video no 28 try django pending
+12
+python manage.py collectstatic
+add  urlpatterns static root , static url
+
+https://learn.justdjango.com/courses/prerequisites/requests
+
+
+
+Cisco  https://t.me/joinchat/AAAAAE6L7V92St_NWngYNg
+Microsoft  https://t.me/joinchat/AAAAAEt62iX4KYAOTg5RJQ
+CompTIA  https://t.me/joinchat/AAAAAEpuG8yaSoO6IZdGjQ
+Linux  https://t.me/joinchat/AAAAAFdmuEfV1-sQP5VhWw
+EC-Council https://t.me/joinchat/AAAAAFaHkQz_twwmyiUETQ
+(ISC)²  & CSA https://t.me/joinchat/AAAAAEqwjxqT3Z7qhwrAQQ
+Oracle https://t.me/joinchat/AAAAAEktdunigdYDpUcgdQ
+Juniper https://t.me/joinchat/AAAAAE2qqWKnpP-R4eAv6Q
+AWS   https://t.me/joinchat/AAAAAFBgXlFu8dMem99npA
+Huawei https://t.me/joinchat/AAAAAEzuq2vPPOZu-tCS2w
+Fortinet  https://t.me/joinchat/AAAAAFCrST08PWXaSptLPw
+Paloalto https://t.me/joinchat/AAAAAFcti8dzEDnx3wy8fA
+ISACA https://t.me/joinchat/AAAAAFFHwWieEQZdcoDd5w
+Offensive Sec & OWASP https://t.me/joinchat/AAAAAEjtDglkhR_5QHTR7g
+SANS, IACRB, NICCS https://t.me/joinchat/AAAAAESULrBSD178ojhCvw
+AND https://t.me/joinchat/AAAAAEdaRw7E2lFRT6kiUA
+Books @ReadCyber
+Trouble @CyberHOW
+
+In case you want to collaborate so that more notices of free courses and / or vouchers are published, please consider your support, Thank you. . .
+Paypal.me/CyberHOW
+
+https://t.me/CyberCourses
+https://www.facebook.com/groups/Cybrary
+And I will add more vendors and Courses soon 😃
+
+
+
+
+-Oops Consept
+-Os Love Babbar telegram topic mark book index in telegram
+-Projects Ideas
+-Aptitude Quiz Corner Gfg Mock Test
+-Dbms
+-ajay@1805 mit
+DS                                   Advnaced
+   -Array                         -  Trie
+    -linked List               - Segement Tree
+   - Stack                        -Disjoint Set
+   - Queue
+   -Binary Tree             - DP 150
+   -Binary Search Tree    PlacementSeries
+   - Heap                               Love Babbat Pla
+   -Hashing                 - Algo Gfg
+  -Graph      -Interview Exp Compayny wise
+  -Matrix      -Puzzels GFG
+   -String
+
+   source /home/ajay/anaconda3/bin/activate
+conda activate base
+
+
+-
+sudo rm -rf /var/lib/dpkg/lock
+
+configration dns name server
+https://www.youtube.com/watch?v=is-eg2X5ru4
+-
+-
+-
+
+
+python manage.py migrate --fake <appname>
+copyassignment.com python
+https://www.udemy.com/course/git-learnit/
+https://practice.geeksforgeeks.org/courses/dsa-self-paced?utm_source=geeksforgeeks&utm_medium=article&utm_campaign=gfg_article_dsa_content_bottom
+
+https://www.udemy.com/course/linux-unix-shell-scripting-certification-training/
+
+
+
+
+
+
+
+
+Because of COVID-19 Situation RedHat provides free courses for 30Days durations. Get the benifits as much as you can. These all are worth more than ₹10-₹15k at RedHat. Here, I'm attaching all the links of free courses.
+
+
+Complimentary Technical Overviews:
+ Red Hat Enterprise Linux Technical Overview (RH024) - https://www.redhat.com/en/services/training/rh024-red-hat-linux-technical-overview
+ Red Hat Agile Integration Technical Overview (DO040) - https://www.redhat.com/en/services/training/do040-red-hat-agile-integration-technical-overview
+ Ansible Essentials: Simplicity in Automation Technical Overview (DO007) - https://www.redhat.com/en/services/training/do007-ansible-essentials-simplicity-automation-technical-overview
+ Deploying Containerized Applications Tech Overview (DO080) - https://www.redhat.com/en/services/training/do080-deploying-containerized-applications-technical-overview
+ Red Hat Satellite Technical Overview (RH053) - https://www.redhat.com/en/services/training/rh053-red-hat-satellite-technical-overview
+ Red Hat OpenStack Technical Overview (CL010) - https://www.redhat.com/en/services/training/cl010-red-hat-openstack-technical-overview
+ Virtualization and Infrastructure Migration Technical Overview (RH018) - https://www.redhat.com/en/services/training/rh018-virtualization-and-infrastructure-migration-technical-overview
+
+
+RHCA Path- 
+Rhcsa
+Rhce 
+Virtualization 
+Troubleshooting 
+Security 
+Openshift 
+Openstack 
+Ansible Tower 
+Storage 
+Cluster 
+After rhce certification 
+Needs 5 more exam pas certification 
+You have total 7 exam pass certification than earn RHCA redhat certified architect 
+After level start 
+If more certification earn
+Like RHCA Label 1
+     RHCA Label 2
+     
+     
+UDEMY 
+PENETRATION TESTING STUDENT
+PENTESTER LAB
+HACK THE BOX
+OSCP
+OSWE
+OSEE
+
+
+download
+
+https://learning.oreilly.com/videos/red-hat-certified/9780135656495/9780135656495-RCSA_04_27_01/
+
+https://learning.oreilly.com/videos/from-zero-to/9780136898689/7355
+

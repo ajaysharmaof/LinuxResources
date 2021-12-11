@@ -1,0 +1,6 @@
+$ sshpass -f remotepass  ssh -n -o StrictHostKeyChecking=No -o PubKeyAuthentication=No ajay@$server 'command'
+
+-f remotepass  -> use remptepass file for auth no need to enter password
+-n -> don't prompt for standard input
+-o -> options,  StrictHostKeyChecking=No ->it won't ask yes or no ,PubKeyAuthentication=No
+

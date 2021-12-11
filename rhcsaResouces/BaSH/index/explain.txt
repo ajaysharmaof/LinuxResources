@@ -1,0 +1,27 @@
+$ sshpass -f remotepass  ssh -n -o StrictHostKeyChecking=No -o PubKeyAuthentication=No ajay@$server 'command'
+
+-f remotepass  -> use remptepass file for auth no need to enter password
+-n -> don't prompt for standard input
+-o -> options,  StrictHostKeyChecking=No ->it won't ask yes or no ,PubKeyAuthentication=No
+
+$ sshpass -f remotepass  ssh -n -o StrictHostKeyChecking=No -o PubKeyAuthentication=No ajay@$server 'command'
+
+-f remotepass  -> use remptepass file for auth no need to enter password
+-n -> don't prompt for standard input
+-o -> options,  StrictHostKeyChecking=No ->it won't ask yes or no ,PubKeyAuthentication=No disable public key authentication
+
+
+$ sshpass -f remotepass ssh -n -o StrictHostKeyChecking=No -o PubkeyAuthentication=No ajay@192.168.0.5 "cat /etc/os-release"
+
+$ sshpass -f remotepass ssh -n -o StrictHostKeyChecking=No -o PubkeyAuthentication=No ajay@192.168.0.15 "cat /etc/os-release"
+
+$ sshpass -f remotepass ssh -n -o StrictHostKeyChecking=No -o PubkeyAuthentication=No ajay@192.168.0.5 "cat /etc/os-release" | grep -w "NAME=" | awk -F "NAME=" '{print $2}'
+"CentOS Linux"
+
+$ sshpass -f remotepass ssh -n -o StrictHostKeyChecking=No -o PubkeyAuthentication=No ajay@192.168.0.15 "cat /etc/os-release" | grep -w "NAME=" | awk -F "NAME=" '{print $2}' | tr '"' " "
+ Debian GNU/Linux 
+
+ssh_option="sshpass -f remotepass ssh -n -o StrictHostKeyChecking=No -o PubkeyAuthentication=No ajay"
+
+$ssh_option@192.168.0.15 "cat /etc/os-release" | grep -w "NAME=" | awk -F "NAME=" '{print $2}' | tr '"' " " 
+

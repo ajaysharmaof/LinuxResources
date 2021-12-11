@@ -1,0 +1,357 @@
+$ sudo getent group wheel
+$ sudo usermod -aG wheel mike
+
+$ sudo visudo
+mike ALL=(ALL) ALL	->allow mike to run all command 
+MIKE ALL=(ALL) NOPASSWD: ALL
+Defaults  timestamp_timeout=10
+Defaults:ajay   timestamp_timeout=10
+
+mike@ajaycentos practice]$ sudo -u ajay whoami ->run a command from specific user -u
+ajay
+
+$ sudo sh -c 'echo "test mike" > /home/ajay/dem.txt'  -> invole new shwll sh -c
+	or
+$ echo "123" | sudo tee /home/ajay/dem.txt
+123
+
+$ findmnt
+$ df -h
+$ free -h
+$ sudo tail -f /var/log/messages
+$ alias h=history
+$ env
+
+$ grep -R ajay /etc 2> /dev/null > demo 	-> redirect error only store output
+$ grep -R ajay /etc 2> /dev/null > demo 2>&1 -> redirect both input and error
+
+$ ps -ef -> get all proces
+$ ps -ef | awk -F " " '{ print $1, $8 }'
+
+$ ps -ef | awk -F " " '{ print $2 }' | rev > nums && cat nums | rev >> nums && cat nums
+
+$ find -name err 2> errpr -> show output and redirect errors to file
+$ find -name err > foundfile 2> err -> store output and error in different file
+
+$ docker --version 1> success 2> error
+$ docker --version 1> docoutput 2> docoutput
+$ docker --version 1> outfile 2>&1 ->store output and error in file don't show output or error in scrren
+
+$ docker --version 1>outss
+	or both same 
+$ docker --version &>outss
+
+$ tree -L 1 / 	->show level 1 file strucure tree form
+
+
+
+       /bin   This directory contains executable programs which are needed  in
+              single user mode and to bring the system up or repair it.
+
+/sbin         Like /bin, this directory holds commands needed to boot the sys‐
+              tem, but which are usually not executed by normal users.
+
+       /boot  Contains static files for the boot loader.  This directory holds
+              only the files which are needed during the  boot  process.   The
+              map  installer  and  configuration  files should go to /sbin and
+              /etc.  The operating system kernel (initrd for example) must  be
+              located in either / or /boot.
+
+       /dev   Special  or  device files, which refer to physical devices.  See
+              mknod(1).
+
+ /etc   Contains configuration files which are  local  to  the  machine.
+              Some larger software packages, like X11, can have their own sub‐
+              directories below /etc.  Site-wide configuration  files  may  be
+              placed  here  or  in  /usr/etc.   Nevertheless,  programs should
+              always look for these files in /etc and you may have  links  for
+              these files to /usr/etc.
+
+         /etc/skel
+              When  a  new  user account is created, files from this directory
+              are usually copied into the user's home directory.
+       /etc/X11
+              Configuration files for the X11 window system (optional).
+       /etc/opt
+              Host-specific   configuration   files  for  add-on  applications
+              installed in /opt.
+
+
+
+       /home  On  machines  with home directories for users, these are usually
+              beneath this directory, directly or not.  The structure of  this
+              directory depends on local administration decisions (optional).
+
+
+
+/lib          This  directory should hold those shared libraries that are nec‐
+              essary to boot the system and to run the commands  in  the  root
+              filesystem.
+ 
+
+  /lost+found
+              This  directory  contains  items  lost in the filesystem.  These
+              items are usually chunks of files mangled as a consequence of  a
+              faulty disk or a system crash.
+
+
+/media        This directory contains mount points for removable media such as
+              CD and DVD disks or USB sticks.  On systems where more than  one
+              device exists for mounting a certain type of media, mount direc‐
+              tories can be created by appending a digit to the name of  those
+              available above starting with '0', but the unqualified name must
+              also exist.
+       /media/usb[1-9]
+              USB drive (optional).
+
+
+      /mnt   This directory is  a  mount  point  for  a  temporarily  mounted
+              filesystem.  In some distributions, /mnt contains subdirectories
+              intended to be  used  as  mount  points  for  several  temporary
+              filesystems.
+
+       /opt   This  directory  should  contain  add-on  packages  that contain
+              static files.
+
+
+       /proc  This is a mount point for the proc  filesystem,  which  provides
+              information  about  running  processes  and  the  kernel.   This
+              pseudo-filesystem is described in more detail in proc(5).
+
+       /root  This directory is usually the home directory for the  root  user
+              (optional).
+
+       /srv   This directory contains site-specific data  that  is  served  by
+              this system.
+
+       /sys   This  is  a mount point for the sysfs filesystem, which provides
+              information about the kernel like /proc, but better  structured,
+              following the formalism of kobject infrastructure.
+
+       /tmp   This  directory  contains  temporary  files which may be deleted
+              with no notice, such as by a regular job or at system boot up.
+
+       /usr   This directory is usually mounted from a separate partition.  It
+              should  hold  only  shareable, read-only data, so that it can be
+              mounted by various machines running Linux.
+       /usr/bin
+              This is the primary directory  for  executable  programs.   Most
+              programs executed by normal users which are not needed for boot‐
+              ing or for repairing the system  and  which  are  not  installed
+              locally should be placed in this directory.ls cd mv rm
+       /usr/sbin
+              This  directory contains program binaries for system administra‐
+              tion which are not essential for the boot process, for  mounting
+              /usr, or for system repair.
+       /usr/etc
+              Site-wide configuration  files  to  be  shared  between  several
+              machines  may  be  stored  in this directory.  However, commands
+              should always reference those files using  the  /etc  directory.
+              Links  from  files in /etc should point to the appropriate files
+              in /usr/etc.
+       /usr/include
+              Include files for the C compiler.
+       /usr/lib
+              Object libraries, including dynamic libraries,  plus  some  exe‐
+              cutables  which  usually are not invoked directly.  More compli‐
+              cated programs may have whole subdirectories there.
+       /usr/local
+              This is where programs which are local to the site typically go.
+       /usr/share
+              This directory contains subdirectories with specific application
+              data, that can be shared among different  architectures  of  the
+              same  OS.   Often  one  finds  stuff  here  that used to live in
+              /usr/doc or /usr/lib or /usr/man.
+       /usr/lib
+              Object libraries, including dynamic libraries,  plus  some  exe‐
+              cutables  which  usually are not invoked directly.  More compli‐
+              cated programs may have whole subdirectories there.
+       /usr/lib/X11
+              The  usual  place for data files associated with X programs, and
+              configuration files for the X system itself.  On Linux, it  usu‐
+              ally is a symbolic link to /usr/X11R6/lib/X11.
+       /usr/local
+              This is where programs which are local to the site typically go.
+       /usr/local/etc
+              Configuration files associated with locally installed programs.
+
+
+       /var   This directory contains files which may change in size, such  as
+              spool and log files.
+
+       /var/backups
+              Reserved for historical reasons.
+       /var/log
+              Miscellaneous log files.
+
+       /var/opt
+              Variable data for /opt.
+
+       /var/cache
+              Data cached for programs.
+       /var/account
+              Process accounting logs (optional)
+       /var/crash
+              System crash dumps (optional).
+
+       /var/cron
+              Reserved for historical reasons.
+       /var/spool
+              Spooled (or queued) files for various programs
+       /var/spool/at
+              Spooled jobs for at(1).
+
+       /var/spool/cron
+              Spooled jobs for cron(8).
+       /var/lock
+              Lock  files are placed in this directory.  The naming convention
+              for device lock files is LCK..<device>  where  <device>  is  the
+              device's name in the filesystem.  The format used is that of HDU
+              UUCP lock files, that is, lock files contain a PID as a  10-byte
+              ASCII decimal number, followed by a newline character.
+
+
+
+
+#Globbing:-
+1> * is used to match any number of characters(zero or more), to understand
+$ ls err*
+$ ls *err*
+$ ls -l e*.*
+
+2> ? is used to match exactly one character. 
+$ ls erro?
+$ ll ????r
+$ ll file????.doc
+$ ll file.???
+
+
+3) Square Brackets [] ->Square brackets are used to match the characters inside []
+$ ll [en]*  ->begin with e or n
+$$ ll [eE]*
+$ ll *[e]	->file ending with e
+$ ll *[e][r]*	->file start anything end with anything consecutive letter er
+$ ll *[e][r][r]*
+$ ll error[1-3]*
+$ ll [e-g]*	->from range e to g
+
+Caret – (^)->
+$ grep '[^P-R]' demo -> search those lines from demo file that starts with P or Q or R.
+
+$ grep '[^A-C]' list.txt -> highlight those lines from demo file that starts with A or B or C.
+
+4) exclamation mark (!) ->! is used to exclude characters from the list that is specified within the square brackets. 
+$ ls *[!.doc]	->not include files ending with .doc or e
+$ ls *[!e]
+$ ll [!de]*	->not include files starting with de ending with anything
+$ grep [!P-R] list.txt	-> show those lines from list.txt file that starts with ‘P’ or Q or R.
+
+ show those lines from list.txt file that starts with any digit from 4 to 8.
+$ grep [!4-8] list.txt
+
+$ ll error[0-9]
+$ ll *[0-9]	->file ending with numbers
+$ ll *[0-12]-[2021].logs
+
+
+Dollar Sign – ($)
+‘$’ is used to define the ending character. If you know want to search information based on last character then you can use ‘$’ in globbing pattern
+
+search those lines from list.txt file that ends with ‘a’.
+$ grep a$ list.txt
+ search those lines from list.txt file that end with the number 50.
+$ grep 50$ list.txt
+
+
+#Curly bracket – ({})->‘{}’ can be used to match filenames with more than one globbing patterns. Each pattern is separated by ‘,’ in curly bracket without any space. 
+
+
+Run the following command to search those files whose names are 5 characters long and the extension is ‘sh’ or the last two characters of the files are ‘st’ and the extension is ‘txt’.
+$ ls -l {?????.sh,*st.txt}
+
+
+delete all files whose extensions are ‘doc’ or ‘docx’.
+$ rm {*.doc,*.docx}
+
+
+Pipe– ( | )
+
+‘|’ sign is also used for applying more than one condition on globbing pattern. Each pattern is separated by ‘|’ symbol in the command
+
+search those filenames which are starting with character ‘a’ and has the extension ‘bash’ or ‘sh’.
+$ ls a*+(.bash|.sh)
+
+Create a bash file named ‘menu.bash’ and add the following script. If the user type 1 or S then it will print “Searching text”. If the user type 2 or R then it will print “Replacing text”. If the user type 3 or D then it will print “Deleting text”. It will print “Try again” for any other input.
+#!/bin/bash
+echo "Select any option from the menu:"
+read answer
+case $answer in
+1 | S )  echo "Searching text";;
+2 | R )  echo "Replacing text";;
+3 | D )  echo "Deleting text";;
+*) echo "Try again.";;
+esac
+
+
+
+
+5) Named character classes ([[:named:]])->It is used to print named values
+
+[:alnum:]’ : Prints all those files having alphabets and digits. Both lower and uppercases are considered.
+‘[:alpha:]’ : Prints all those files having alphabets only. Both lower and uppercases are considered.
+‘[:digit:]’ : Prints all those files having digits.
+‘[:lower:]’: Prints all those files having lower-case letters.
+‘[:punct:]’ : Prints all those files having punctuation characters.  Will search for ! ” # $ % & ‘ ( ) * + , – . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~.
+‘[:space:]’: Prints all those files having space characters.
+‘[:upper:]’: Prints all those files having lower-case letters.
+
+
+
+
+ls [[:alpha:]]* : Will display the directories starting with a alphabet (either in lower or uppercase) and ending with any characters.
+
+ls *[[:alnum:]]*.* : Will display the files (of any type) containing a alphabet or a digit but may start or end with any length of characters.
+
+ls *[[:digit:]] : Will display the directories which may start with any length of characters but ending with a digit.
+
+ls ?[[:lower:]] : Will display the directories starting with exactly one character and ending with a lowercase character.
+
+ls *[[:upper:]]* : Will display the directories containing a alphabet or digit which may start or end with any length of characters.
+
+
+
+#Linux Shell Embedding:-
+You can embed new shells on the command line. Means a command line can have a new shell embedded inside it
+$var only exists in the temporary sub shell. It means if you'll try to print it outside the shell then it will display nothing as shown below.
+
+ echo $(var=hii;echo $var)
+hii
+$ echo $var
+
+
+	or also used ` instead of $()
+echo `cd Desktop; ls *.txt | grep demo`
+
+
+#Shell Options
+
+There are two options set and unset and both are built-in commands. By default, bash will treat any undefined variable as unbound variable (variable having no value).
+
+set -u option, will treat undefined variables as error.
+
+set +u option, will display nothing.
+
+$ echo $var
+
+[ajay@ajaycentos practice]$ set -u
+[ajay@ajaycentos practice]$ echo $var
+-bash: var: unbound variable
+$ echo $var
+
+
+
+
+
+
+
+s
